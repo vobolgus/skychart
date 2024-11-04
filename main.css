@@ -1,74 +1,118 @@
-        body {
-            font-family: Arial, sans-serif;
-        }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
 
-        #main-container {
-            width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
+#main-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+}
 
-        #image-container {
-            width: 800px;
-            height: 400px;
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
+#image-container {
+    width: 100%;
+    height: auto;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
 
-        .images-container {
-            position: absolute;
-            width: 800px;
-            height: 400px;
-            top: 0;
-            left: 0;
-            display: flex;
-            transition: left 0.5s ease-out;
-        }
+.images-container {
+    position: absolute;
+    width: 200%;
+    height: auto;
+    top: 0;
+    left: 0;
+    display: flex;
+    transition: left 0.5s ease-out;
+}
 
-        .image {
-            width: 400px;
-            height: 400px;
-            object-fit: contain;
-        }
+.image {
+    width: 50%;
+    height: auto;
+    object-fit: contain;
+}
 
-        #input-container, #control-container, #progress-container {
-            margin-bottom: 20px;
-        }
+#input-container, #control-container, #progress-container {
+    margin-bottom: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
 
-        label {
-            font-size: 16px;
-            margin-right: 10px;
-        }
+label {
+    font-size: 16px;
+    margin-right: 10px;
+}
 
-        input[type="number"] {
-            font-size: 16px;
-            width: 100px;
-            text-align: center;
-        }
+input[type="number"] {
+    font-size: 16px;
+    width: 100px;
+    text-align: center;
+}
 
-        button {
-            font-size: 16px;
-            padding: 5px 10px;
-            background-color: #2196F3;
-            color: white;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            margin-left: 10px;
-        }
+button {
+    font-size: 16px;
+    padding: 10px 15px;
+    background-color: #2196F3;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    margin: 5px 5px;
+}
 
-        #feedback-label {
-            font-size: 18px;
-            color: green;
-            height: 24px;
-        }
+button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
 
-        progress {
-            width: 100%;
-            height: 20px;
-        }
+#feedback-label {
+    font-size: 18px;
+    color: green;
+    min-height: 24px;
+    margin-bottom: 10px;
+}
 
-        #timer-label, #score-label {
-            font-size: 16px;
-        }
+progress {
+    width: 100%;
+    height: 20px;
+    margin-bottom: 10px;
+}
+
+#timer-label, #score-label {
+    font-size: 16px;
+}
+
+@media (max-width: 600px) {
+    .image {
+        width: 100%;
+    }
+
+    .images-container {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    #input-container, #control-container, #progress-container {
+        margin-bottom: 15px;
+    }
+
+    button {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    input[type="number"] {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+}
