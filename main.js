@@ -61,6 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let currentLanguage = 'ru'; // Default language
 
+        let game = null;
+
         const setLanguage = (lang) => {
             currentLanguage = lang;
 
@@ -98,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setLanguage(currentLanguage);
 
         // Game initialization
-        let game = null;
         if (document.getElementById('game-container')) {
              class MessierGame {
                  constructor() {
