@@ -49,6 +49,16 @@ body {
     flex: 1;
 }
 
+/* Game Container */
+#game-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 /* Home Page Styles */
 #main-container h1 {
     font-size: 2em;
