@@ -1,5 +1,105 @@
- document.addEventListener('DOMContentLoaded', () => {
-         if (document.getElementById('game-container')) {
+document.addEventListener('DOMContentLoaded', () => {
+        // Language data
+        const translations = {
+            en: {
+                // Common
+                home: "Home",
+                playGame: "Play Game",
+                language: "Русский",
+                // Main page
+                welcome: "Welcome to the Messier Object Quiz",
+                startQuiz: "Start Quiz",
+                // Game page
+                enterNumber: "Enter Messier Number (1-110):",
+                submit: "Submit",
+                pause: "Pause",
+                resume: "Resume",
+                next: "Next",
+                hint: "Hint",
+                timeRemaining: "Time Remaining: ",
+                seconds: "s",
+                score: "Score: ",
+                correct: "Correct!",
+                incorrect: "Incorrect! The correct answer was M",
+                timesUp: "Time's up! Moving to the next object.",
+                paused: "Paused",
+                hintText: "Hint: ",
+                gameOver: "Game Over\nYour score: ",
+                correctAnswers: "\nCorrect answers: ",
+                timeTaken: "\nTime taken: ",
+                secondsSuffix: " seconds"
+            },
+            ru: {
+                // Common
+                home: "Главная",
+                playGame: "Играть",
+                language: "English",
+                // Main page
+                welcome: "Добро пожаловать в Викторину Объектов Мессье",
+                startQuiz: "Начать Викторину",
+                // Game page
+                enterNumber: "Введите номер Мессье (1-110):",
+                submit: "Отправить",
+                pause: "Пауза",
+                resume: "Продолжить",
+                next: "Далее",
+                hint: "Подсказка",
+                timeRemaining: "Оставшееся время: ",
+                seconds: "с",
+                score: "Счет: ",
+                correct: "Верно!",
+                incorrect: "Неверно! Правильный ответ: М",
+                timesUp: "Время вышло! Переходим к следующему объекту.",
+                paused: "Пауза",
+                hintText: "Подсказка: ",
+                gameOver: "Игра окончена\nВаш счет: ",
+                correctAnswers: "\nПравильных ответов: ",
+                timeTaken: "\nЗатраченное время: ",
+                secondsSuffix: " секунд"
+            }
+        };
+
+        let currentLanguage = 'en'; // Default language
+
+        const setLanguage = (lang) => {
+            currentLanguage = lang;
+
+            // Common Elements
+            document.getElementById('language-toggle').textContent = translations[lang].language;
+            document.getElementById('nav-home').textContent = translations[lang].home;
+            document.getElementById('nav-play-game').textContent = translations[lang].playGame;
+
+            // Check if we're on the main page or game page
+            if (document.getElementById('welcome-message')) {
+                // Main Page
+                document.getElementById('welcome-message').textContent = translations[lang].welcome;
+                document.getElementById('start-button').textContent = translations[lang].startQuiz;
+            } else if (document.getElementById('game-container')) {
+                // Game Page
+                document.getElementById('label-enter-number').textContent = translations[lang].enterNumber;
+                document.getElementById('submit-button').textContent = translations[lang].submit;
+                document.getElementById('pause-button').textContent = translations[lang].pause;
+                document.getElementById('next-button').textContent = translations[lang].next;
+                document.getElementById('hint-button').textContent = translations[lang].hint;
+                // Update other dynamic texts if necessary
+            }
+        };
+
+        document.getElementById('language-toggle').addEventListener('click', () => {
+            setLanguage(currentLanguage === 'en' ? 'ru' : 'en');
+
+            // Update game texts if game is running
+            if (game) {
+                game.updateLanguage(currentLanguage);
+            }
+        });
+
+        // Initialize language
+        setLanguage(currentLanguage);
+
+        // Game initialization
+        let game = null;
+        if (document.getElementById('game-container')) {
              class MessierGame {
                  constructor() {
                      // Game variables
@@ -16,6 +116,9 @@
                      this.feedback_timer = null;
                      this.next_question_timer = null;
                      this.timer_interval = null;
+
+                     // Translation
+                     this.lang = currentLanguage;
 
                      // Data
                      this.data = [];  // to be loaded
@@ -50,6 +153,8 @@
                      this.loadQuestion();
                  }
 
+
+
                  shuffleArray(array) {
                      // Fisher-Yates shuffle
                      for (let i = array.length - 1; i > 0; i--) {
@@ -58,6 +163,21 @@
                      }
                      return array;
                  }
+
+                 updateLanguage(lang) {
+                        this.lang = lang;
+
+                        // Update UI texts
+                        document.getElementById('label-enter-number').textContent = translations[lang].enterNumber;
+                        document.getElementById('submit-button').textContent = translations[lang].submit;
+                        document.getElementById('pause-button').textContent = this.is_paused ? translations[lang].resume : translations[lang].pause;
+                        document.getElementById('next-button').textContent = translations[lang].next;
+                        document.getElementById('hint-button').textContent = translations[lang].hint;
+                        this.timer_label.textContent = `${translations[lang].timeRemaining}${this.remaining_time}${translations[lang].seconds}`;
+                        this.score_label.textContent = `${translations[lang].score}${this.score}`;
+                        // Update feedback label if necessary
+                        // [Additional updates can be made here]
+                    }
 
                  loadData() {
                      // Load data from table.txt
@@ -79,7 +199,7 @@
 
                      // Reset timer
                      this.remaining_time = this.time_per_question;
-                     this.timer_label.textContent = `Time Remaining: ${this.remaining_time}s`;
+                     this.timer_label.textContent = `${translations[this.lang].timeRemaining}${this.remaining_time}${translations[this.lang].seconds}`;
 
                      // Clear input
                      this.number_input.value = 1;
@@ -189,11 +309,11 @@
 
                      if (user_answer === correct_answer) {
                          this.correct_answers += 1;
-                         this.feedback_label.textContent = 'Correct!';
+                         this.feedback_label.textContent = translations[this.lang].correct;
                          this.feedback_label.style.color = 'green';
                          this.score += Math.floor(10 + this.remaining_time / this.time_per_question * 10);
                      } else {
-                         this.feedback_label.textContent = `Incorrect! The correct answer was M${correct_answer}.`;
+                         this.feedback_label.textContent = `${translations[this.lang].incorrect}${correct_answer}.`;
                          this.feedback_label.style.color = 'red';
                          this.score -= 5;
                      }
@@ -236,7 +356,7 @@
 
                      this.remaining_time -= 1;
                      if (this.remaining_time <= 0) {
-                         this.feedback_label.textContent = "Time's up! Moving to the next object.";
+                         this.feedback_label.textContent = translations[this.lang].timesUp;
                          this.feedback_label.style.color = 'red';
 
                          // Display full map
@@ -252,7 +372,7 @@
                          this.feedback_timer = setTimeout(() => this.clearFeedback(), 2000);
                          this.next_question_timer = setTimeout(() => this.nextQuestion(), 2000);
                      } else {
-                         this.timer_label.textContent = `Time Remaining: ${this.remaining_time}s`;
+                         this.timer_label.textContent = `${translations[this.lang].timeRemaining}${this.remaining_time}${translations[this.lang].seconds}`;
                      }
                  }
 
@@ -262,8 +382,8 @@
                          clearInterval(this.timer_interval);
                          if (this.feedback_timer) clearTimeout(this.feedback_timer);
                          if (this.next_question_timer) clearTimeout(this.next_question_timer);
-                         this.pause_button.textContent = 'Resume';
-                         this.feedback_label.textContent = 'Paused';
+                         this.pause_button.textContent = translations[this.lang].resume;
+                         this.feedback_label.textContent = translations[this.lang].paused;
                          this.feedback_label.style.color = 'blue';
                      } else {
                          this.is_paused = false;
@@ -273,7 +393,7 @@
                              this.feedback_timer = setTimeout(() => this.clearFeedback(), 2000);
                              this.next_question_timer = setTimeout(() => this.nextQuestion(), 2000);
                          }
-                         this.pause_button.textContent = 'Pause';
+                         this.pause_button.textContent = translations[this.lang].pause;
                          this.feedback_label.textContent = '';
                          this.number_input.focus();
                      }
@@ -284,7 +404,7 @@
 
                      let mn = this.sequence[this.current_index];
                      let info = this.data[mn - 1];  // Assuming first element is the hint
-                     this.feedback_label.textContent = `Hint: ${info}`;
+                     this.feedback_label.textContent = `${translations[this.lang].hintText}${info}`;
                      this.feedback_label.style.color = 'orange';
 
                      // Clear hint after 5 seconds
@@ -293,10 +413,9 @@
 
                  endGame() {
                      let total_time = Math.floor((Date.now() - this.start_time) / 1000);
-                     let end_message = `Game Over\nYour score: ${this.score}\n` +
-                         `Correct answers: ${this.correct_answers}/${this.total_objects}\n` +
-                         `Time taken: ${total_time} seconds`;
-                     this.feedback_label.textContent = end_message;
+                     this.feedback_label.textContent = `${translations[this.lang].gameOver}${this.score}` +
+                         `${translations[this.lang].correctAnswers}${this.correct_answers}/${this.total_objects}` +
+                         `${translations[this.lang].timeTaken}${total_time}${translations[this.lang].secondsSuffix}`;
                      this.feedback_label.style.color = 'black';
                      clearInterval(this.timer_interval);
                      this.submit_button.disabled = true;
@@ -322,5 +441,5 @@
              // Start the game
              let game = new MessierGame();
          }
-     }
+        }
         );
