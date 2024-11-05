@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setLanguage(currentLanguage);
 
   // Game initialization
-  if (document.getElementById("game-container")) {
+  if (document.getElementById("main-container")) {
     class MessierGame {
       constructor() {
         // Game variables
