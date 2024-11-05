@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        let currentLanguage = 'en'; // Default language
+        let currentLanguage = 'ru'; // Default language
 
         const setLanguage = (lang) => {
             currentLanguage = lang;
