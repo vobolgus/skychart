@@ -42,8 +42,8 @@ body {
 
 /* Game Page Styles */
 #image-container {
-    width: 100%;
-    height: auto;
+    width: 800px;
+    height: 400px;
     position: relative;
     overflow: hidden;
     margin-bottom: 20px;
@@ -51,8 +51,8 @@ body {
 
 .images-container {
     position: absolute;
-    width: 200%;
-    height: auto;
+    width: 800px;
+    height: 400px;
     top: 0;
     left: 0;
     display: flex;
@@ -60,8 +60,8 @@ body {
 }
 
 .image {
-    width: 50%;
-    height: auto;
+    width: 400px;
+    height: 400px;
     object-fit: contain;
 }
 
@@ -114,32 +114,23 @@ progress {
 }
 
 /* Responsive Styles */
-@media (max-width: 600px) {
-    .image {
-        width: 100%;
-    }
+@media (max-width: 800px) {
+            .images-container{
+                flex-direction: column;
+                height: 800px;
+                align-items: center;
+                width: 100vw
+            }
+            #image-container{
+                height: 800px;
+                max-height: 66vh;
+                width: 100vw;
+            }
+            #main-container{
+                width: 100vw;
+            }
+            .image{
+                max-height: 30vh;
+            }
 
-    .images-container {
-        width: 100%;
-        flex-direction: column;
-    }
-
-    #input-container, #control-container, #progress-container {
-        margin-bottom: 15px;
-    }
-
-    button {
-        width: 100%;
-        margin: 5px 0;
-    }
-
-    input[type="number"] {
-        width: 100%;
-        margin-top: 10px;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 5px;
-    }
-}
+        }
