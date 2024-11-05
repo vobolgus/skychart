@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   };
 
-  let currentLanguage = "ru"; // Default language
+  let currentLanguage = "en"; // Default language
 
   let game = null;
 
