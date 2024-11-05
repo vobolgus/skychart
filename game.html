@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Messier Object Quiz</title>
+    <link rel="stylesheet" href="main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+    <div id="main-container">
+
+        <div id="image-container">
+            <!-- Images will be displayed here -->
+            <div id="current-images-container" class="images-container">
+                <img id="photo-image" src="" alt="Photo" class="image">
+                <img id="map-image" src="" alt="Map" class="image">
+            </div>
+        </div>
+
+        <div id="input-container">
+            <label for="number-input">Enter Messier Number (1-110):</label>
+            <input type="number" id="number-input" min="1" max="110" value="1">
+            <button id="submit-button">Submit</button>
+        </div>
+
+        <div id="control-container">
+            <button id="pause-button">Pause</button>
+            <button id="next-button">Next</button>
+            <button id="hint-button">Hint</button>
+        </div>
+
+        <div id="progress-container">
+            <div id="feedback-label"></div>
+            <progress id="progress-bar" max="110" value="0"></progress>
+            <div id="timer-label">Time Remaining: 30s</div>
+            <div id="score-label">Score: 0</div>
+        </div>
+
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
