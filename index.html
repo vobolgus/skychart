@@ -1,72 +1,77 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <title>Messier Object Quiz - Home</title>
-    <link rel="stylesheet" href="main.css?wefdjdjdjdohdh">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta charset="UTF-8">
-</head>
-<body>
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="game.html">Play Game</a>
-        <!-- Language Selection -->
-        <button id="language-toggle">Русский</button>
-    </nav>
+    <head>
+        <title>Messier Object Quiz - Home</title>
+        <link rel="stylesheet" href="main.css?wefdjdjdjdohdh" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="game.html">Play Game</a>
+            <!-- Language Selection -->
+            <button id="language-toggle">Русский</button>
+        </nav>
 
-    <div id="main-container">
-        <h1 id="welcome-message">Welcome to the Messier Object Quiz</h1>
-        <p>Test your knowledge of the 110 Messier objects!</p>
-        <button id="start-button">Start Quiz</button>
-    </div>
+        <div id="main-container">
+            <h1 id="welcome-message">Welcome to the Messier Object Quiz</h1>
+            <p>Test your knowledge of the 110 Messier objects!</p>
+            <button id="start-button">Start Quiz</button>
+        </div>
 
-    <script>
-        document.getElementById('start-button').addEventListener('click', () => {
-            window.location.href = 'game.html';
-        });
-        document.addEventListener('DOMContentLoaded', () => {
-        // Language data
-        const translations = {
-            en: {
-                welcome: "Welcome to the Messier Object Quiz",
-                startQuiz: "Start Quiz",
-                home: "Home",
-                playGame: "Play Game",
-                language: "Русский"
-            },
-            ru: {
-                welcome: "Добро пожаловать в Викторину Объектов Мессье",
-                startQuiz: "Начать Викторину",
-                home: "Главная",
-                playGame: "Играть",
-                language: "English"
-            }
-        };
+        <script>
+            document
+                .getElementById("start-button")
+                .addEventListener("click", () => {
+                    window.location.href = "game.html";
+                });
+            document.addEventListener("DOMContentLoaded", () => {
+                // Language data
+                const translations = {
+                    en: {
+                        welcome: "Welcome to the Messier Object Quiz",
+                        startQuiz: "Start Quiz",
+                        home: "Home",
+                        playGame: "Play Game",
+                        language: "Русский",
+                    },
+                    ru: {
+                        welcome: "Добро пожаловать в Викторину Объектов Мессье",
+                        startQuiz: "Начать Викторину",
+                        home: "Главная",
+                        playGame: "Играть",
+                        language: "English",
+                    },
+                };
 
-        let currentLanguage = 'en'; // Default language
+                let currentLanguage = "en"; // Default language
 
-        const setLanguage = (lang) => {
-            currentLanguage = lang;
-            document.getElementById('welcome-message').textContent = translations[lang].welcome;
-            document.getElementById('start-button').textContent = translations[lang].startQuiz;
-            document.getElementById('language-toggle').textContent = translations[lang].language;
-            // Update navigation links
-            const navLinks = document.querySelectorAll('nav a');
-            navLinks[0].textContent = translations[lang].home;
-            navLinks[1].textContent = translations[lang].playGame;
-        };
+                const setLanguage = (lang) => {
+                    currentLanguage = lang;
+                    document.getElementById("welcome-message").textContent =
+                        translations[lang].welcome;
+                    document.getElementById("start-button").textContent =
+                        translations[lang].startQuiz;
+                    document.getElementById("language-toggle").textContent =
+                        translations[lang].language;
+                    // Update navigation links
+                    const navLinks = document.querySelectorAll("nav a");
+                    navLinks[0].textContent = translations[lang].home;
+                    navLinks[1].textContent = translations[lang].playGame;
+                };
 
-        document.getElementById('language-toggle').addEventListener('click', () => {
-            setLanguage(currentLanguage === 'en' ? 'ru' : 'en');
-        });
+                document
+                    .getElementById("language-toggle")
+                    .addEventListener("click", () => {
+                        setLanguage(currentLanguage === "en" ? "ru" : "en");
+                    });
 
-        // Initialize language
-        setLanguage(currentLanguage);
-        });
-    </script>
+                // Initialize language
+                setLanguage(currentLanguage);
+            });
+        </script>
 
-    <footer>
-        &copy; 2024 Messier Object Quiz. All rights reserved.
-    </footer>
-</body>
+        <footer>&copy; 2024 Messier Object Quiz. All rights reserved.</footer>
+    </body>
 </html>

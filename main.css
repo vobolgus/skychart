@@ -4,8 +4,8 @@ nav {
     overflow: hidden;
     width: 100%;
     top: 0;
-    position: fixed;  /* Fixes the nav bar at the top */
-    z-index: 1000;    /* Ensures the nav bar stays above other elements */
+    position: fixed; /* Fixes the nav bar at the top */
+    z-index: 1000; /* Ensures the nav bar stays above other elements */
 }
 
 nav a {
@@ -23,7 +23,8 @@ nav a:hover {
 }
 
 /* Make the page a flex container */
-html, body {
+html,
+body {
     height: 100%;
     margin: 0;
 }
@@ -62,7 +63,7 @@ body {
 #start-button {
     font-size: 1.2em;
     padding: 10px 20px;
-    background-color: #4CAF50;
+    background-color: #4caf50;
     color: white;
     border: none;
     border-radius: 5px;
@@ -106,7 +107,9 @@ footer {
     object-fit: contain;
 }
 
-#input-container, #control-container, #progress-container {
+#input-container,
+#control-container,
+#progress-container {
     margin-bottom: 20px;
 }
 
@@ -124,7 +127,7 @@ input[type="number"] {
 button {
     font-size: 16px;
     padding: 10px 15px;
-    background-color: #2196F3;
+    background-color: #2196f3;
     color: white;
     border-radius: 5px;
     border: none;
@@ -150,28 +153,28 @@ progress {
     margin-bottom: 10px;
 }
 
-#timer-label, #score-label {
+#timer-label,
+#score-label {
     font-size: 16px;
 }
 
 /* Responsive Styles */
 @media (max-width: 800px) {
-            .images-container{
-                flex-direction: column;
-                height: 800px;
-                align-items: center;
-                width: 100vw
-            }
-            #image-container{
-                height: 800px;
-                max-height: 66vh;
-                width: 100vw;
-            }
-            #main-container{
-                width: 100vw;
-            }
-            .image{
-                max-height: 30vh;
-            }
-
-        }
+    .images-container {
+        flex-direction: column;
+        height: 800px;
+        align-items: center;
+        width: 100vw;
+    }
+    #image-container {
+        height: 800px;
+        max-height: 66vh;
+        width: 100vw;
+    }
+    #main-container {
+        width: 100vw;
+    }
+    .image {
+        max-height: 30vh;
+    }
+}
