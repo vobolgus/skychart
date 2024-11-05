@@ -109,57 +109,70 @@
                  }
 
                  animateTransition() {
-                     // Prepare next images
-                     let next_index = this.current_index + 1;
-                     if (next_index >= this.total_objects) {
-                         this.endGame();
-                         return;
-                     }
-
-                     let mn = this.sequence[next_index];
-                     let next_photo_path = `photos/M${mn}.jpg`;
-                     let next_map_path = `maps/M${mn}_map.png`;
-
-                     // Create a new images container for next images
-                     let next_images_container = document.createElement('div');
-                     next_images_container.classList.add('images-container');
-                     next_images_container.style.left = '800px';  // Start to the right
-
-                     let next_photo_image = document.createElement('img');
-                     next_photo_image.classList.add('image');
-                     next_photo_image.src = next_photo_path;
-
-                     let next_map_image = document.createElement('img');
-                     next_map_image.classList.add('image');
-                     next_map_image.src = next_map_path;
-
-                     next_images_container.appendChild(next_photo_image);
-                     next_images_container.appendChild(next_map_image);
-
-                     let image_container = document.getElementById('image-container');
-                     image_container.appendChild(next_images_container);
-
-                     // Force reflow
-                     next_images_container.offsetHeight;
-
-                     // Start animation
-                     let current_images_container = document.getElementById('current-images-container');
-                     current_images_container.style.left = '-800px';  // Move to the left
-                     next_images_container.style.left = '0px';  // Move to center
-
-                     // After animation, update current images container
-                     setTimeout(() => {
-                         // Remove old container
-                         image_container.removeChild(current_images_container);
-
-                         // Set id to new container
-                         next_images_container.id = 'current-images-container';
-
-                         // Update index and load question
-                         this.current_index += 1;
-                         this.loadQuestion();
-                     }, 500);  // Duration matches the CSS transition duration
+                // Prepare next images
+                 let next_index = this.current_index + 1;
+                 if (next_index >= this.total_objects) {
+                    this.endGame();
+                    return;
                  }
+
+                 let mn = this.sequence[next_index];
+                 let next_photo_path = `photos/M${mn}.jpg`;
+                 let next_map_path = `maps/M${mn}_map.png`;
+
+                 // Create a new images container for next images
+                 let next_images_container = document.createElement('div');
+                 next_images_container.classList.add('images-container');
+                 next_images_container.style.left = `${document.getElementById('image-container').offsetWidth}px`;  // Start to the right
+
+                 let next_photo_image = document.createElement('img');
+                 next_photo_image.classList.add('image');
+                 next_photo_image.src = next_photo_path;
+
+                 let next_map_image = document.createElement('img');
+                 next_map_image.classList.add('image');
+                 next_map_image.src = next_map_path;
+
+                 next_images_container.appendChild(next_photo_image);
+                 next_images_container.appendChild(next_map_image);
+
+                 let image_container = document.getElementById('image-container');
+                 image_container.appendChild(next_images_container);
+
+                 // Force reflow
+                 next_images_container.offsetHeight;
+
+                 // Start animation
+                 let current_images_container = document.getElementById('current-images-container');
+                 current_images_container.style.left = `-${image_container.offsetWidth}px`;  // Move to the left
+                 next_images_container.style.left = '0px';  // Move to center
+
+                 // After animation, update current images container
+                 setTimeout(() => {
+                    // Remove old container
+                    image_container.removeChild(current_images_container);
+
+                    // Set id to new container
+                    next_images_container.id = 'current-images-container';
+
+                    // Update index and load question
+                    this.current_index += 1;
+                    this.loadQuestion();
+
+                    // Now set waiting_for_next_question to false
+                    this.waiting_for_next_question = false;
+                 }, 500);  // Duration matches the CSS transition duration
+                 }
+
+                 nextQuestion() {
+                 if (this.is_paused) return;
+
+                 this.animateTransition();
+
+                 // Remove this line
+                 // this.waiting_for_next_question = false;
+                 }
+
 
                  onSubmit() {
                      if (this.is_paused) return;
@@ -215,14 +228,6 @@
 
                  clearFeedback() {
                      this.feedback_label.textContent = '';
-                 }
-
-                 nextQuestion() {
-                     if (this.is_paused) return;
-
-                     this.animateTransition();
-
-                     this.waiting_for_next_question = false;
                  }
 
                  updateTimer() {
