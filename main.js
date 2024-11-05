@@ -121,6 +121,7 @@
                  let next_map_path = `maps/M${mn}_map.png`;
 
                  // Create a new images container for next images
+
                  let next_images_container = document.createElement('div');
                  next_images_container.classList.add('images-container');
                  next_images_container.style.left = `${document.getElementById('image-container').offsetWidth}px`;  // Start to the right
