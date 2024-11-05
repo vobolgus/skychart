@@ -83,6 +83,18 @@ footer {
 }
 
 /* Game Page Styles */
+
+/* Game Container */
+#game-container {
+    flex: 1; /* Allows the container to grow and fill available space */
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto; /* Centers the container horizontally */
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
 #image-container {
     width: 800px;
     height: 400px;
