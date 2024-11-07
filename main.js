@@ -248,55 +248,6 @@ document.addEventListener("DOMContentLoaded", () => {
         this.timer_interval = setInterval(() => this.updateTimer(), 1000);
 
         // Load the first question
-        // this.loadQuestion();
-        this.preloadImages();
-      }
-
-      preloadImages() {
-        for (let i = 1; i <= 110; i++) {
-          this.imagesToLoad.push(`photos/M${i}.jpg`);
-          this.imagesToLoad.push(`maps/M${i}_map.png`);
-          this.imagesToLoad.push(`maps/M${i}_map_full.png`);
-        }
-
-        this.imagesToLoad.forEach(src => {
-          const img = new Image();
-          img.src = src;
-          img.onload = () => {
-            this.loadedImages++;
-            this.updateLoadingProgress();
-            if (this.loadedImages === this.totalImages) {
-              this.startGame();
-            }
-          };
-          img.onerror = () => {
-            console.error(`Failed to load image: ${src}`);
-            this.loadedImages++;
-            this.updateLoadingProgress();
-            if (this.loadedImages === this.totalImages) {
-              this.startGame();
-            }
-          };
-        });
-      }
-
-      updateLoadingProgress() {
-        const progress = Math.round((this.loadedImages / this.totalImages) * 100);
-        // Обновите элемент загрузки, если он существует
-        const loader = document.getElementById('loader');
-        if (loader) {
-          loader.querySelector('p').textContent = `Загрузка... ${progress}%`;
-        }
-      }
-
-      startGame() {
-        // Скройте загрузчик
-        const loader = document.getElementById('loader');
-        if (loader) {
-          loader.style.display = 'none';
-        }
-
-        // Запустите игру
         this.loadQuestion();
       }
 
@@ -602,12 +553,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // Start the game and store it in the outer scope
-    document.addEventListener("DOMContentLoaded", () => {
-      if (document.getElementById("game-container")) {
-        document.getElementById('game-container').style.display = 'none';
-        game = new MessierGame()
-      }
-    });
+    game = new MessierGame()
   }
 });
