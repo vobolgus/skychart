@@ -1,4 +1,71 @@
 document.addEventListener("DOMContentLoaded", () => {
+    'use strict';
+  // Добавим функцию для предзагрузки изображений
+  const preloadImages = (imagePaths, callback) => {
+    let loadedImages = 0;
+    const totalImages = imagePaths.length;
+
+    if (totalImages === 0) {
+        callback();
+        return;
+    }
+
+    const progressElement = document.getElementById('loading-progress');
+
+    const updateProgress = () => {
+        const percent = Math.floor((loadedImages / totalImages) * 100);
+        progressElement.value = percent;
+    };
+
+    for (let i = 0; i < totalImages; i++) {
+        const img = new Image();
+        img.src = imagePaths[i];
+        img.onload = () => {
+            loadedImages++;
+            updateProgress();
+            if (loadedImages === totalImages) {
+                callback();
+            }
+        };
+        img.onerror = () => {
+            console.error('Ошибка загрузки изображения:', imagePaths[i]);
+            loadedImages++;
+            updateProgress();
+            if (loadedImages === totalImages) {
+                callback();
+            }
+        };
+    }
+  };
+  // Собираем пути ко всем изображениям, которые нужно предзагрузить
+  const imagePaths = [];
+  for (let i = 1; i <= 5; i++) {
+      imagePaths.push(`photos/M${i}.jpg`);
+      imagePaths.push(`maps/M${i}_map.png`);
+      imagePaths.push(`maps/M${i}_map_full.png`);
+  }
+
+
+  // Функция инициализации игры
+  const initGame = () => {
+      // Скрываем загрузочный экран
+      const loadingScreen = document.getElementById('loading-screen');
+      loadingScreen.style.display = 'none';
+
+      // Показываем контейнер игры
+      const gameContainer = document.getElementById('game-container');
+      gameContainer.style.display = 'block';
+
+      // Инициализируем игру
+      if (document.getElementById('game-container')) {
+          // Ваш существующий код инициализации игры
+          // ...
+
+          // Обновляем язык после загрузки игры
+          setLanguage(currentLanguage);
+      }
+  };
+
   // Language data
   const translations = {
     en: {
@@ -68,36 +135,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Common Elements
     document.getElementById("language-toggle").textContent =
-      translations[lang].language;
+        translations[lang].language;
     document.getElementById("nav-home").textContent = translations[lang].home;
     document.getElementById("nav-play-game").textContent =
-      translations[lang].playGame;
+        translations[lang].playGame;
 
     // Check if we're on the main page or game page
     if (document.getElementById("welcome-message")) {
       // Main Page
       document.getElementById("welcome-message").textContent =
-        translations[lang].welcome;
+          translations[lang].welcome;
       document.getElementById("start-button").textContent =
-        translations[lang].startQuiz;
+          translations[lang].startQuiz;
     } else if (document.getElementById("main-container")) {
       // Game Page
       document.getElementById("label-enter-number").textContent =
-        translations[lang].enterNumber;
+          translations[lang].enterNumber;
       document.getElementById("submit-button").textContent =
-        translations[lang].submit;
+          translations[lang].submit;
       document.getElementById("pause-button").textContent =
-        game && game.is_paused
-          ? translations[lang].resume
-          : translations[lang].pause;
+          game && game.is_paused
+              ? translations[lang].resume
+              : translations[lang].pause;
       document.getElementById("next-button").textContent =
-        translations[lang].next;
+          translations[lang].next;
       document.getElementById("hint-button").textContent =
-        translations[lang].hint;
+          translations[lang].hint;
       document.getElementById("timer-label").textContent =
-        `${translations[lang].timeRemaining}${game ? game.remaining_time : "30"}${translations[lang].seconds}`;
+          `${translations[lang].timeRemaining}${game ? game.remaining_time : "30"}${translations[lang].seconds}`;
       document.getElementById("score-label").textContent =
-        `${translations[lang].score}${game ? game.score : "0"}`;
+          `${translations[lang].score}${game ? game.score : "0"}`;
 
       // Update feedback if present
       const feedback = document.getElementById("feedback-label");
@@ -121,17 +188,23 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize language
   setLanguage(currentLanguage);
 
+  // Начинаем предзагрузку изображений
+    preloadImages(imagePaths, initGame);
+
   // Game initialization
   if (document.getElementById("game-container")) {
     class MessierGame {
       constructor() {
         // Game variables
         this.sequence = this.shuffleArray(
-          [...Array(110).keys()].map((i) => i + 1),
+            [...Array(110).keys()].map((i) => i + 1),
         ); // [1..110] shuffled
         this.current_index = 0;
         this.correct_answers = 0;
         this.total_objects = 110;
+        this.imagesToLoad = [];
+        this.loadedImages = 0;
+        this.totalImages = 220; // 110 фото и 110 карт
         this.is_paused = false;
         this.time_per_question = 30; // seconds
         this.remaining_time = this.time_per_question;
@@ -175,6 +248,55 @@ document.addEventListener("DOMContentLoaded", () => {
         this.timer_interval = setInterval(() => this.updateTimer(), 1000);
 
         // Load the first question
+        // this.loadQuestion();
+        this.preloadImages();
+      }
+
+      preloadImages() {
+        for (let i = 1; i <= 110; i++) {
+          this.imagesToLoad.push(`photos/M${i}.jpg`);
+          this.imagesToLoad.push(`maps/M${i}_map.png`);
+          this.imagesToLoad.push(`maps/M${i}_map_full.png`);
+        }
+
+        this.imagesToLoad.forEach(src => {
+          const img = new Image();
+          img.src = src;
+          img.onload = () => {
+            this.loadedImages++;
+            this.updateLoadingProgress();
+            if (this.loadedImages === this.totalImages) {
+              this.startGame();
+            }
+          };
+          img.onerror = () => {
+            console.error(`Failed to load image: ${src}`);
+            this.loadedImages++;
+            this.updateLoadingProgress();
+            if (this.loadedImages === this.totalImages) {
+              this.startGame();
+            }
+          };
+        });
+      }
+
+      updateLoadingProgress() {
+        const progress = Math.round((this.loadedImages / this.totalImages) * 100);
+        // Обновите элемент загрузки, если он существует
+        const loader = document.getElementById('loader');
+        if (loader) {
+          loader.querySelector('p').textContent = `Загрузка... ${progress}%`;
+        }
+      }
+
+      startGame() {
+        // Скройте загрузчик
+        const loader = document.getElementById('loader');
+        if (loader) {
+          loader.style.display = 'none';
+        }
+
+        // Запустите игру
         this.loadQuestion();
       }
 
@@ -193,16 +315,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Update UI texts
         document.getElementById("label-enter-number").textContent =
-          translations[lang].enterNumber;
+            translations[lang].enterNumber;
         document.getElementById("submit-button").textContent =
-          translations[lang].submit;
+            translations[lang].submit;
         document.getElementById("pause-button").textContent = this.is_paused
-          ? translations[lang].resume
-          : translations[lang].pause;
+            ? translations[lang].resume
+            : translations[lang].pause;
         document.getElementById("next-button").textContent =
-          translations[lang].next;
+            translations[lang].next;
         document.getElementById("hint-button").textContent =
-          translations[lang].hint;
+            translations[lang].hint;
         this.timer_label.textContent = `${translations[lang].timeRemaining}${this.remaining_time}${translations[lang].seconds}`;
         this.score_label.textContent = `${translations[lang].score}${this.score}`;
         // Update feedback label if necessary
@@ -252,8 +374,8 @@ document.addEventListener("DOMContentLoaded", () => {
       loadImages(mn, show_full_map) {
         let photo_path = `photos/M${mn}.jpg`;
         let map_path = show_full_map
-          ? `maps/M${mn}_map_full.png`
-          : `maps/M${mn}_map.png`;
+            ? `maps/M${mn}_map_full.png`
+            : `maps/M${mn}_map.png`;
 
         // Set image sources
         this.photo_image.src = photo_path;
@@ -297,7 +419,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Start animation
         let current_images_container = document.getElementById(
-          "current-images-container",
+            "current-images-container",
         );
         current_images_container.style.left = `-${image_container.offsetWidth}px`; // Move to the left
         next_images_container.style.left = "0px"; // Move to center
@@ -345,7 +467,7 @@ document.addEventListener("DOMContentLoaded", () => {
           this.feedback_label.textContent = translations[this.lang].correct;
           this.feedback_label.style.color = "green";
           this.score += Math.floor(
-            10 + (this.remaining_time / this.time_per_question) * 10,
+              10 + (this.remaining_time / this.time_per_question) * 10,
           );
         } else {
           this.feedback_label.textContent = `${translations[this.lang].incorrect}${correct_answer}.`;
@@ -406,8 +528,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
           this.feedback_timer = setTimeout(() => this.clearFeedback(), 2000);
           this.next_question_timer = setTimeout(
-            () => this.nextQuestion(),
-            2000,
+              () => this.nextQuestion(),
+              2000,
           );
         } else {
           this.timer_label.textContent = `${translations[this.lang].timeRemaining}${this.remaining_time}${translations[this.lang].seconds}`;
@@ -430,8 +552,8 @@ document.addEventListener("DOMContentLoaded", () => {
             // Restart timers
             this.feedback_timer = setTimeout(() => this.clearFeedback(), 2000);
             this.next_question_timer = setTimeout(
-              () => this.nextQuestion(),
-              2000,
+                () => this.nextQuestion(),
+                2000,
             );
           }
           this.pause_button.textContent = translations[this.lang].pause;
@@ -455,9 +577,9 @@ document.addEventListener("DOMContentLoaded", () => {
       endGame() {
         let total_time = Math.floor((Date.now() - this.start_time) / 1000);
         this.feedback_label.textContent =
-          `${translations[this.lang].gameOver}${this.score}` +
-          `${translations[this.lang].correctAnswers}${this.correct_answers}/${this.total_objects}` +
-          `${translations[this.lang].timeTaken}${total_time}${translations[this.lang].secondsSuffix}`;
+            `${translations[this.lang].gameOver}${this.score}` +
+            `${translations[this.lang].correctAnswers}${this.correct_answers}/${this.total_objects}` +
+            `${translations[this.lang].timeTaken}${total_time}${translations[this.lang].secondsSuffix}`;
         this.feedback_label.style.color = "black";
         clearInterval(this.timer_interval);
         this.submit_button.disabled = true;
@@ -481,6 +603,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Start the game and store it in the outer scope
-    game = new MessierGame();
+    document.addEventListener("DOMContentLoaded", () => {
+      if (document.getElementById("game-container")) {
+        document.getElementById('game-container').style.display = 'none';
+        game = new MessierGame()
+      }
+    });
   }
 });
