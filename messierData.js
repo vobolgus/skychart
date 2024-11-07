@@ -23,15 +23,15 @@ export const messierData = [
   {
     number: 4,
     hints: {
-      en: 'The Cat’s Eye Cluster, a globular cluster in Scorpius.',
-      ru: 'Скопление Кошачий Глаз, шаровое скопление в созвездии Скорпион.',
+      en: 'A bright globular cluster in Scorpius.',
+      ru: 'Яркое шаровое скопление в созвездии Скорпион.',
     },
   },
   {
     number: 5,
     hints: {
       en: 'A globular cluster in Serpens Caput, known for its dense core.',
-      ru: 'Шаровое скопление в Змее Голова, известное своим плотным ядром.',
+      ru: 'Шаровое скопление в Голове Змеи, известное своим плотным ядром.',
     },
   },
   {
@@ -45,7 +45,7 @@ export const messierData = [
     number: 7,
     hints: {
       en: 'An open cluster near the stinger of Scorpius.',
-      ru: 'Рассеянное скопление рядом с жалом Скорпиона.',
+      ru: 'Рассеянное скопление Птолемея рядом с жалом Скорпиона.',
     },
   },
   {
@@ -65,8 +65,8 @@ export const messierData = [
   {
     number: 10,
     hints: {
-      en: 'Another globular cluster in Ophiuchus, near M12.',
-      ru: 'Еще одно шаровое скопление в Змееносце, рядом с M12.',
+      en: 'A globular cluster in Ophiuchus',
+      ru: 'Шаровое скопление в Змееносце',
     },
   },
   {
@@ -79,15 +79,15 @@ export const messierData = [
   {
     number: 12,
     hints: {
-      en: 'A globular cluster in Ophiuchus, close to M10.',
-      ru: 'Шаровое скопление в созвездии Змееносец, близко к M10.',
+      en: 'A globular cluster in Ophiuchus',
+      ru: 'Шаровое скопление в созвездии Змееносец',
     },
   },
   {
     number: 13,
     hints: {
-      en: 'The Great Hercules Cluster, one of the brightest globular clusters in Hercules.',
-      ru: 'Большое Скопление в Геркулесе, одно из самых ярких шаровых скоплений в Геркулесе.',
+      en: 'The Great Hercules Cluster, one of the brightest globular clusters.',
+      ru: 'Большое Скопление в Геркулесе, одно из самых ярких шаровых скоплений.',
     },
   },
   {
@@ -136,7 +136,7 @@ export const messierData = [
     number: 20,
     hints: {
       en: 'The Trifid Nebula, an emission and reflection nebula in Sagittarius.',
-      ru: 'Туманность Тройная, эмиссионная и отражательная туманность в Стрельце.',
+      ru: 'Трехраздельная Туманность, эмиссионная и отражательная туманность в Стрельце.',
     },
   },
   {
@@ -395,7 +395,7 @@ export const messierData = [
     number: 57,
     hints: {
       en: 'The Ring Nebula, a planetary nebula in Lyra.',
-      ru: 'Кольцевая туманность, планетарная туманность в Лире.',
+      ru: 'Туманность Кольцо, планетарная туманность в Лире.',
     },
   },
   {
@@ -415,8 +415,8 @@ export const messierData = [
   {
     number: 60,
     hints: {
-      en: 'A galaxy in Virgo paired with M59.',
-      ru: 'Галактика в Деве, пара с M59.',
+      en: 'A galaxy in Virgo.',
+      ru: 'Галактика в Деве.',
     },
   },
   {
@@ -457,8 +457,8 @@ export const messierData = [
   {
     number: 66,
     hints: {
-      en: 'A spiral galaxy in Leo, paired with M65.',
-      ru: 'Спиральная галактика во Льве, пара с M65.',
+      en: 'A spiral galaxy in Leo.',
+      ru: 'Спиральная галактика во Льве.',
     },
   },
   {
@@ -485,8 +485,8 @@ export const messierData = [
   {
     number: 70,
     hints: {
-      en: 'A globular cluster in Sagittarius, near M69.',
-      ru: 'Шаровое скопление в Стрельце, рядом с M69.',
+      en: 'A globular cluster in Sagittarius.',
+      ru: 'Шаровое скопление в Стрельце.',
     },
   },
   {
@@ -577,7 +577,7 @@ export const messierData = [
     number: 83,
     hints: {
       en: 'The Southern Pinwheel Galaxy, a spiral galaxy in Hydra.',
-      ru: 'Южная Вихревая галактика, спиральная галактика в Гидре.',
+      ru: 'Галактика Южная Вертушка, спиральная галактика в Гидре.',
     },
   },
   {
