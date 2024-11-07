@@ -314,7 +314,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let photo_path = `photos_avif/M${mn}.avif`;
         let map_path = show_full_map
             ? `maps_avif/M${mn}_map_full.avif`
-            : `maps/M${mn}_map.avif`;
+            : `maps_avif/M${mn}_map.avif`;
 
         // Set image sources
         this.photo_image.src = photo_path;
