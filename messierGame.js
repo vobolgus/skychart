@@ -1,5 +1,7 @@
 import {translations} from "./translations.js";
 
+let currentLanguage = "en"; // Default language
+
 export class MessierGame {
       constructor() {
         // Game variables
