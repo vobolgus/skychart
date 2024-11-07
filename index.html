@@ -5,20 +5,26 @@
         <link rel="stylesheet" href="main.css" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charset="UTF-8" />
+        <!-- Add this in the <head> section -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     </head>
     <body>
         <nav>
-            <a href="index.html">Home</a>
-            <a href="game.html">Play Game</a>
+            <a href="index.html" id="nav-home">Home</a>
+            <a href="game.html" id="nav-play-game">Play Game</a>
             <!-- Language Selection -->
             <button id="language-toggle">Русский</button>
+            <button id="theme-toggle">Toggle Theme</button>
         </nav>
 
         <div id="main-container">
             <h1 id="welcome-message">Welcome to the Messier Object Quiz</h1>
-            <p>Test your knowledge of the 110 Messier objects!</p>
+            <p id="test-your-knowledge">Test your knowledge of the 110 Messier objects!</p>
             <button id="start-button">Start Quiz</button>
             <!-- Add IDs to options for translation -->
+            <label for="difficulty-select" id="label-select-difficulty">Select Difficulty:</label>
             <select id="difficulty-select">
               <option value="easy" id="option-easy">Easy</option>
               <option value="medium" id="option-medium" selected>Medium</option>
@@ -32,6 +38,7 @@
                 const translations = {
                     en: {
                         welcome: "Welcome to the Messier Object Quiz",
+                        testYourKnowledge: "Test your knowledge of the 110 Messier objects!",
                         startQuiz: "Start Quiz",
                         home: "Home",
                         playGame: "Play Game",
@@ -40,17 +47,20 @@
                         easy: "Easy",
                         medium: "Medium",
                         hard: "Hard",
+                        toggleTheme: "Toggle Theme", // Added this key
                     },
                     ru: {
                         welcome: "Добро пожаловать в Викторину Объектов Мессье",
                         startQuiz: "Начать Викторину",
+                        testYourKnowledge: "Проверьте свои знания 110 объектов Мессье!",
                         home: "Главная",
                         playGame: "Играть",
                         language: "English",
                         selectDifficulty: "Выберите сложность:",
                         easy: "Легко",
-                        medium: "Средне",
+                        medium: "Средняя",
                         hard: "Сложно",
+                        toggleTheme: "Переключить тему", // Added this key
                     },
                 };
 
@@ -58,37 +68,56 @@
 
                 const setLanguage = (lang) => {
                     currentLanguage = lang;
-                    document.getElementById("welcome-message").textContent =
-                        translations[lang].welcome;
-                    document.getElementById("start-button").textContent =
-                        translations[lang].startQuiz;
-                    document.getElementById("language-toggle").textContent =
-                        translations[lang].language;
-                    document.getElementById("label-select-difficulty").textContent = translations[lang].selectDifficulty;
-                    document.getElementById("option-easy").textContent = translations[lang].easy;
-                    document.getElementById("option-medium").textContent = translations[lang].medium;
-                    document.getElementById("option-hard").textContent = translations[lang].hard;
 
-                    // Update navigation links
-                    const navLinks = document.querySelectorAll("nav a");
-                    navLinks[0].textContent = translations[lang].home;
-                    navLinks[1].textContent = translations[lang].playGame;
+                    // Update navigation buttons
+                    document.getElementById('nav-home').textContent = translations[lang].home;
+                    document.getElementById('nav-play-game').textContent = translations[lang].playGame;
+
+                    // Update theme toggle button text
+                    document.getElementById('theme-toggle').textContent = translations[lang].toggleTheme;
+
+                    // Update language toggle button text
+                    document.getElementById('language-toggle').textContent = translations[lang].language;
+
+                    // Update main page elements
+                    if (document.getElementById('welcome-message')) {
+                        document.getElementById('welcome-message').textContent = translations[lang].welcome;
+                        document.getElementById('test-your-knowledge').textContent = translations[lang].testYourKnowledge;
+                        document.getElementById('start-button').textContent = translations[lang].startQuiz;
+                        document.getElementById('label-select-difficulty').textContent = translations[lang].selectDifficulty;
+
+                        // Update the options in the select element
+                        document.getElementById('option-easy').textContent = translations[lang].easy;
+                        document.getElementById('option-medium').textContent = translations[lang].medium;
+                        document.getElementById('option-hard').textContent = translations[lang].hard;
+                    }
                 };
 
-                document
-                    .getElementById("language-toggle")
-                    .addEventListener("click", () => {
-                        setLanguage(currentLanguage === "en" ? "ru" : "en");
-                    });
-
-                document
-                    .getElementById("start-button")
-                    .addEventListener("click", () => {
-                const difficulty = document.getElementById("difficulty-select").value;
-                window.location.href = `game.html?difficulty=${difficulty}`;
+                // Event listener for language toggle button
+                document.getElementById("language-toggle").addEventListener("click", () => {
+                    setLanguage(currentLanguage === "en" ? "ru" : "en");
                 });
 
-                // Initialize language
+                // Initialize theme
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+
+                // Event listener for theme toggle button
+                const themeToggleButton = document.getElementById('theme-toggle');
+                themeToggleButton.addEventListener('click', () => {
+                    const currentTheme = document.documentElement.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                });
+
+                // Event listener for start button
+                document.getElementById("start-button").addEventListener("click", () => {
+                    const difficulty = document.getElementById("difficulty-select").value;
+                    window.location.href = `game.html?difficulty=${difficulty}`;
+                });
+
+                // Initialize language on page load
                 setLanguage(currentLanguage);
             });
         </script>

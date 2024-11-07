@@ -1,25 +1,54 @@
+/* Define CSS variables for light and dark themes */
+:root {
+    --background-color: #ffffff;
+    --text-color: #333333;
+    --primary-color: #2196f3;
+    --secondary-color: #4caf50;
+    --accent-color: #ff5722;
+    --button-text-color: #ffffff;
+    --font-family: 'Roboto', sans-serif;
+}
+
+[data-theme="dark"] {
+    --background-color: #1e1e1e;
+    --text-color: #e0e0e0;
+    --primary-color: #bb86fc;
+    --secondary-color: #03dac6;
+    --accent-color: #cf6679;
+    --button-text-color: #ffffff;
+}
+
+
 /* Navigation Bar */
 nav {
-    background-color: #333;
+    background-color: var(--primary-color);
     overflow: hidden;
     width: 100%;
     top: 0;
-    position: fixed; /* Fixes the nav bar at the top */
-    z-index: 1000; /* Ensures the nav bar stays above other elements */
+    position: fixed;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
 }
 
-nav a {
-    float: left;
+nav a, nav button {
     display: block;
-    color: #f2f2f2;
+    color: var(--button-text-color);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 16px;
 }
 
-nav a:hover {
-    background-color: #ddd;
-    color: black;
+nav a:hover, nav button:hover {
+    background-color: var(--secondary-color);
+}
+
+nav button {
+    margin-left: auto;
 }
 
 /* Make the page a flex container */
@@ -33,33 +62,40 @@ html, body {
 
 /* General Styles */
 body {
-    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-color);
     display: flex;
     flex-direction: column;
-    margin-top: 50px;
-    padding: 0;
+    min-height: 100vh;
 }
 
-/* Main Container */
 #main-container {
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
     text-align: center;
-    padding: 0;
+    padding: 60px;
     box-sizing: border-box;
     flex: 1;
 }
 
-/* Home Page Styles */
-#main-container h1 {
-    font-size: 2em;
-    margin-bottom: 0.5em;
+/* Center child elements */
+#main-container h1,
+#main-container p,
+#main-container label,
+#main-container select,
+#main-container button {
+    margin: 10px auto;
+    text-align: center;
 }
 
-#main-container p {
-    font-size: 1.2em;
-    margin-bottom: 1.5em;
+/* Adjust the select and button elements */
+#main-container select,
+#main-container button {
+    display: block;
 }
 
 #start-button {
@@ -76,49 +112,43 @@ body {
     background-color: #45a049;
 }
 
-/* Footer styles */
+/* Input Fields */
+label {
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+input[type="number"] {
+    font-size: 16px;
+    width: 100px;
+    text-align: center;
+    padding: 5px;
+    margin-right: 10px;
+    border: 1px solid var(--text-color);
+    border-radius: 5px;
+}
+
+
+/* Footer Styles */
 footer {
-    background-color: #333;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--button-text-color);
     padding: 10px;
     text-align: center;
+    margin-top: auto;
 }
 
 /* Game Page Styles */
 
 /* Game Container */
 #game-container {
-    flex: 1; /* Allows the container to grow and fill available space */
+    flex: 1;
     width: 100%;
     max-width: 800px;
-    margin: 0 auto; /* Centers the container horizontally */
+    margin: 80px auto 0; /* Adjust margin-top to account for fixed nav bar */
     text-align: center;
     padding: 20px;
     box-sizing: border-box;
-}
-
-#image-container {
-    width: 800px;
-    height: 400px;
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 20px;
-}
-
-.images-container {
-    position: absolute;
-    width: 800px;
-    height: 400px;
-    top: 0;
-    left: 0;
-    display: flex;
-    transition: left 0.5s ease-out;
-}
-
-.image {
-    width: 400px;
-    height: 400px;
-    object-fit: contain;
 }
 
 #input-container,
@@ -138,15 +168,21 @@ input[type="number"] {
     text-align: center;
 }
 
+/* Buttons */
 button {
     font-size: 16px;
     padding: 10px 15px;
-    background-color: #2196f3;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--button-text-color);
     border-radius: 5px;
     border: none;
     cursor: pointer;
-    margin: 5px 5px;
+    margin: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--secondary-color);
 }
 
 button:disabled {
@@ -154,18 +190,53 @@ button:disabled {
     cursor: not-allowed;
 }
 
+/* Feedback Label Styles */
 #feedback-label {
     font-size: 18px;
-    color: green;
     min-height: 24px;
     margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
 }
 
+.feedback-correct {
+    background-color: #dff0d8;
+    color: #3c763d;
+}
+
+.feedback-incorrect {
+    background-color: #f2dede;
+    color: #a94442;
+}
+
+.feedback-hint {
+    background-color: #fcf8e3;
+    color: #8a6d3b;
+}
+
+.feedback-paused {
+    background-color: #d9edf7;
+    color: #31708f;
+}
+
+/* Progress Bar */
 progress {
     width: 100%;
     height: 20px;
     margin-bottom: 10px;
+    appearance: none;
 }
+
+progress::-webkit-progress-bar {
+    background-color: #e0e0e0;
+    border-radius: 5px;
+}
+
+progress::-webkit-progress-value {
+    background-color: var(--primary-color);
+    border-radius: 5px;
+}
+
 
 #timer-label,
 #score-label {
@@ -232,5 +303,56 @@ progress {
     }
     .image {
         max-height: 30vh;
+    }
+}
+
+/* Image Container */
+#image-container {
+    position: relative;
+    width: 800px;
+    height: 400px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+/* Images Container */
+.images-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.image {
+    width: 50%;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Animation Classes */
+.slide-in {
+    animation: slideIn 0.5s forwards;
+}
+
+.slide-out {
+    animation: slideOut 0.5s forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0%);
+    }
+    to {
+        transform: translateX(-100%);
     }
 }

@@ -7,6 +7,7 @@
       language: "Русский",
       // Main page
       welcome: "Welcome to the Messier Object Quiz",
+      testYourKnowledge: 'Test your knowledge of the 110 Messier objects!',
       startQuiz: "Start Quiz",
       // Game page
       enterNumber: "Enter Messier Number (1-110):",
@@ -32,6 +33,7 @@
       selectDifficulty: 'Select Difficulty:',
       easy: 'Easy',
       medium: 'Medium',
+      toggleTheme: 'Toggle Theme',
       hard: 'Hard',
       difficultyLevel: '\nDifficulty Level: ',
     },
@@ -42,6 +44,7 @@
       language: "English",
       // Main page
       welcome: "Добро пожаловать в Викторину Объектов Мессье",
+      testYourKnowledge: 'Проверьте свои знания 110 объектов Мессье!',
       startQuiz: "Начать Викторину",
       // Game page
       enterNumber: "Введите номер Мессье (1-110):",
@@ -63,6 +66,7 @@
       correctAnswers: "\nПравильных ответов: ",
       timeTaken: "\nЗатраченное время: ",
       secondsSuffix: " секунд",
+      toggleTheme: 'Переключить тему',
       hintsNotAllowed: 'Подсказки недоступны в сложном режиме.',
       selectDifficulty: 'Выберите сложность:',
       easy: 'Легко',

@@ -9,6 +9,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const difficulty = urlParams.get('difficulty') || 'medium'; // Default to 'medium' if not specified
 
 
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
+    // Add event listener for theme toggle button
+    const themeToggleButton = document.getElementById('theme-toggle');
+    themeToggleButton.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+    });
+
+
     let currentLanguage = "en"; // Default language
 
     let game = null;
@@ -22,6 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("nav-home").textContent = translations[lang].home;
     document.getElementById("nav-play-game").textContent =
         translations[lang].playGame;
+    document.getElementById('theme-toggle').textContent = translations[lang].toggleTheme;
+
 
     if (document.getElementById("difficulty-select")) {
         document.getElementById("label-select-difficulty").textContent = translations[lang].selectDifficulty;

@@ -64,6 +64,12 @@ export class MessierGame {
         this.loadQuestion();
       }
 
+      toggleTheme() {
+          const currentTheme = document.documentElement.getAttribute('data-theme');
+          const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', newTheme);
+          localStorage.setItem('theme', newTheme);
+      }
 
       shuffleArray(array) {
         // Fisher-Yates shuffle
@@ -134,6 +140,7 @@ export class MessierGame {
         this.hint_button.textContent = translations[lang].hint;
         this.timer_label.textContent = `${translations[lang].timeRemaining}${this.remaining_time}${translations[lang].seconds}`;
         this.score_label.textContent = `${translations[lang].score}${this.score}`;
+        this.theme_toggle_button = translations[lang].toggleTheme;
 
         // Update feedback label if it's showing a hint
         if (this.feedback_label.textContent.startsWith(translations[lang === 'en' ? 'ru' : 'en'].hintText)) {
@@ -190,63 +197,57 @@ export class MessierGame {
       }
 
       animateTransition() {
-        // Prepare next images
-        let next_index = this.current_index + 1;
-        if (next_index >= this.total_objects) {
-          this.endGame();
-          return;
+            // Prepare next images
+            let next_index = this.current_index + 1;
+            if (next_index >= this.total_objects) {
+                this.endGame();
+                return;
+            }
+
+            let mn = this.sequence[next_index];
+            let next_photo_path = `photos_avif/M${mn}.avif`;
+            let next_map_path = `maps_avif/M${mn}_map.avif`;
+
+            // Create a new images container for next images
+            let next_images_container = document.createElement('div');
+            next_images_container.classList.add('images-container', 'slide-in');
+
+            let next_photo_image = document.createElement('img');
+            next_photo_image.classList.add('image');
+            next_photo_image.src = next_photo_path;
+
+            let next_map_image = document.createElement('img');
+            next_map_image.classList.add('image');
+            next_map_image.src = next_map_path;
+
+            next_images_container.appendChild(next_photo_image);
+            next_images_container.appendChild(next_map_image);
+
+            let image_container = document.getElementById('image-container');
+            image_container.appendChild(next_images_container);
+
+            // Get the current images container
+            let current_images_container = document.getElementById('current-images-container');
+
+            // Add slide-out animation to current images
+            current_images_container.classList.add('slide-out');
+
+            // After animation, update current images container
+            setTimeout(() => {
+                // Remove old container
+                image_container.removeChild(current_images_container);
+
+                // Set id to new container
+                next_images_container.id = 'current-images-container';
+
+                // Update index and load question
+                this.current_index += 1;
+                this.loadQuestion();
+
+                // Now set waiting_for_next_question to false
+                this.waiting_for_next_question = false;
+            }, 500); // Duration matches the CSS animation duration
         }
-
-        let mn = this.sequence[next_index];
-        let next_photo_path = `photos_avif/M${mn}.avif`;
-        let next_map_path = `maps_avif/M${mn}_map.avif`;
-
-        // Create a new images container for next images
-
-        let next_images_container = document.createElement("div");
-        next_images_container.classList.add("images-container");
-        next_images_container.style.left = `${document.getElementById("image-container").offsetWidth}px`; // Start to the right
-
-        let next_photo_image = document.createElement("img");
-        next_photo_image.classList.add("image");
-        next_photo_image.src = next_photo_path;
-
-        let next_map_image = document.createElement("img");
-        next_map_image.classList.add("image");
-        next_map_image.src = next_map_path;
-
-        next_images_container.appendChild(next_photo_image);
-        next_images_container.appendChild(next_map_image);
-
-        let image_container = document.getElementById("image-container");
-        image_container.appendChild(next_images_container);
-
-        // Force reflow
-        next_images_container.offsetHeight;
-
-        // Start animation
-        let current_images_container = document.getElementById(
-            "current-images-container",
-        );
-        current_images_container.style.left = `-${image_container.offsetWidth}px`; // Move to the left
-        next_images_container.style.left = "0px"; // Move to center
-
-        // After animation, update current images container
-        setTimeout(() => {
-          // Remove old container
-          image_container.removeChild(current_images_container);
-
-          // Set id to new container
-          next_images_container.id = "current-images-container";
-
-          // Update index and load question
-          this.current_index += 1;
-          this.loadQuestion();
-
-          // Now set waiting_for_next_question to false
-          this.waiting_for_next_question = false;
-        }, 500); // Duration matches the CSS transition duration
-      }
 
       nextQuestion() {
         if (this.is_paused) return;
@@ -272,13 +273,13 @@ export class MessierGame {
         if (user_answer === correct_answer) {
           this.correct_answers += 1;
           this.feedback_label.textContent = translations[this.lang].correct;
-          this.feedback_label.style.color = "green";
+          this.feedback_label.className = 'feedback-label feedback-correct';
           this.score += Math.floor(
               10 + (this.remaining_time / this.time_per_question) * 10,
           );
         } else {
           this.feedback_label.textContent = `${translations[this.lang].incorrect}${correct_answer}.`;
-          this.feedback_label.style.color = "red";
+          this.feedback_label.className = 'feedback-label feedback-incorrect';
           this.score -= 5;
         }
 
@@ -351,7 +352,7 @@ export class MessierGame {
           if (this.next_question_timer) clearTimeout(this.next_question_timer);
           this.pause_button.textContent = translations[this.lang].resume;
           this.feedback_label.textContent = translations[this.lang].paused;
-          this.feedback_label.style.color = "blue";
+          this.feedback_label.className = 'feedback-label feedback-paused';
         } else {
           this.is_paused = false;
           this.timer_interval = setInterval(() => this.updateTimer(), 1000);
@@ -365,6 +366,7 @@ export class MessierGame {
           }
           this.pause_button.textContent = translations[this.lang].pause;
           this.feedback_label.textContent = "";
+          this.feedback_label.className = 'feedback-label';
           this.number_input.focus();
         }
       }
@@ -374,7 +376,7 @@ export class MessierGame {
 
         if (!this.allowHints) {
           this.feedback_label.textContent = translations[this.lang].hintsNotAllowed;
-          this.feedback_label.style.color = 'red';
+          this.feedback_label.className = 'feedback-label feedback-incorrect';
           return;
         }
 
@@ -383,13 +385,13 @@ export class MessierGame {
 
         if (objectInfo && objectInfo.hints && objectInfo.hints[this.lang]) {
           this.feedback_label.textContent = `${translations[this.lang].hintText}${objectInfo.hints[this.lang]}`;
-          this.feedback_label.style.color = 'orange';
+          this.feedback_label.className = 'feedback-label feedback-hint';
 
           // Clear hint after 5 seconds
           setTimeout(() => this.clearFeedback(), 5000);
         } else {
           this.feedback_label.textContent = translations[this.lang].noHintAvailable;
-          this.feedback_label.style.color = 'orange';
+          this.feedback_label.className = 'feedback-label feedback-hint';
         }
       }
 
