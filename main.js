@@ -132,6 +132,9 @@ document.addEventListener("DOMContentLoaded", () => {
         this.current_index = 0;
         this.correct_answers = 0;
         this.total_objects = 110;
+        this.imagesToLoad = [];
+        this.loadedImages = 0;
+        this.totalImages = 220; // 110 фото и 110 карт
         this.is_paused = false;
         this.time_per_question = 30; // seconds
         this.remaining_time = this.time_per_question;
@@ -175,7 +178,56 @@ document.addEventListener("DOMContentLoaded", () => {
         this.timer_interval = setInterval(() => this.updateTimer(), 1000);
 
         // Load the first question
-        this.loadQuestion();
+        // this.loadQuestion();
+        this.preloadImages();
+      }
+
+      preloadImages() {
+      for (let i = 1; i <= 110; i++) {
+        this.imagesToLoad.push(`photos/M${i}.jpg`);
+        this.imagesToLoad.push(`maps/M${i}_map.png`);
+        this.imagesToLoad.push(`maps/M${i}_map_full.png`);
+      }
+
+      this.imagesToLoad.forEach(src => {
+        const img = new Image();
+        img.src = src;
+        img.onload = () => {
+          this.loadedImages++;
+          this.updateLoadingProgress();
+          if (this.loadedImages === this.totalImages) {
+            this.startGame();
+          }
+        };
+        img.onerror = () => {
+          console.error(`Failed to load image: ${src}`);
+          this.loadedImages++;
+          this.updateLoadingProgress();
+          if (this.loadedImages === this.totalImages) {
+            this.startGame();
+          }
+        };
+      });
+      }
+
+      updateLoadingProgress() {
+      const progress = Math.round((this.loadedImages / this.totalImages) * 100);
+      // Обновите элемент загрузки, если он существует
+      const loader = document.getElementById('loader');
+      if (loader) {
+        loader.querySelector('p').textContent = `Загрузка... ${progress}%`;
+        }
+      }
+
+      startGame() {
+      // Скройте загрузчик
+      const loader = document.getElementById('loader');
+      if (loader) {
+        loader.style.display = 'none';
+      }
+
+      // Запустите игру
+      this.loadQuestion();
       }
 
       shuffleArray(array) {
