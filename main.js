@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
       imagePaths.push(`maps/M${i}_map_full.png`);
   }
 
+
   // Функция инициализации игры
   const initGame = () => {
       // Скрываем загрузочный экран
