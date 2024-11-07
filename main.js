@@ -353,7 +353,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // Update score label
-        this.score_label.textContent = `Score: ${this.score}`;
+        this.score_label.textContent = `${translations[this.lang].score}${this.score}`;
 
         // Display full map
         let mn = this.sequence[this.current_index];
