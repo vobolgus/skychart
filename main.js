@@ -163,9 +163,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // Собираем пути ко всем изображениям, которые нужно предзагрузить
   const imagePaths = [];
   for (let i = 1; i <= 110; i++) {
-      imagePaths.push(`photos/M${i}.jpg`);
-      imagePaths.push(`maps/M${i}_map.png`);
-      imagePaths.push(`maps/M${i}_map_full.png`);
+      imagePaths.push(`photos_avif/M${i}.avif`);
+      imagePaths.push(`maps_avif/M${i}_map.avif`);
+      imagePaths.push(`maps_avif/M${i}_map_full.avif`);
   }
 
 
@@ -311,10 +311,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       loadImages(mn, show_full_map) {
-        let photo_path = `photos/M${mn}.jpg`;
+        let photo_path = `photos_avif/M${mn}.avif`;
         let map_path = show_full_map
-            ? `maps/M${mn}_map_full.png`
-            : `maps/M${mn}_map.png`;
+            ? `maps_avif/M${mn}_map_full.avif`
+            : `maps/M${mn}_map.avif`;
 
         // Set image sources
         this.photo_image.src = photo_path;
@@ -330,8 +330,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         let mn = this.sequence[next_index];
-        let next_photo_path = `photos/M${mn}.jpg`;
-        let next_map_path = `maps/M${mn}_map.png`;
+        let next_photo_path = `photos_avif/M${mn}.avif`;
+        let next_map_path = `maps_avif/M${mn}_map.avif`;
 
         // Create a new images container for next images
 
