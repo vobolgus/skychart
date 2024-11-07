@@ -1,5 +1,5 @@
-import { translations } from './translations.js';
-import { MessierGame } from './messierGame.js';
+import { translations } from './translations.js?yu';
+import { MessierGame } from './messierGame.js?uy';
 
 document.addEventListener("DOMContentLoaded", () => {
     'use strict';

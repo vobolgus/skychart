@@ -9,9 +9,6 @@ export class MessierGame {
         this.current_index = 0;
         this.correct_answers = 0;
         this.total_objects = 110;
-        this.imagesToLoad = [];
-        this.loadedImages = 0;
-        this.totalImages = 220; // 110 фото и 110 карт
         this.is_paused = false;
         this.time_per_question = 30; // seconds
         this.remaining_time = this.time_per_question;
