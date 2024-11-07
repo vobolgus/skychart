@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
   // Собираем пути ко всем изображениям, которые нужно предзагрузить
   const imagePaths = [];
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 110; i++) {
       imagePaths.push(`photos/M${i}.jpg`);
       imagePaths.push(`maps/M${i}_map.png`);
       imagePaths.push(`maps/M${i}_map_full.png`);
