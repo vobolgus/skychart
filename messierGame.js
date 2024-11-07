@@ -4,8 +4,11 @@ import { messierData } from './messierData.js';
 let currentLanguage = "en"; // Default language
 
 export class MessierGame {
-      constructor() {
+      constructor(difficulty) {
         // Game variables
+        this.difficulty = difficulty || 'medium'; // Default to 'medium' if not specified
+        this.total_objects = 0; // Will be set based on difficulty
+        this.sequence = []; // Will be set based on difficulty
         this.sequence = this.shuffleArray(
             [...Array(110).keys()].map((i) => i + 1),
         ); // [1..110] shuffled
@@ -24,6 +27,9 @@ export class MessierGame {
 
         // Translation
         this.lang = currentLanguage;
+
+        // Data
+        this.data = []; // to be loaded
 
         // Load data
         this.loadData();
@@ -48,8 +54,8 @@ export class MessierGame {
         this.hint_button.addEventListener("click", () => this.showHint());
         document.addEventListener("keydown", (event) => this.onKeyDown(event));
 
-        // Load data
-        this.loadData();
+        // Adjust game settings based on difficulty
+        this.adjustDifficultySettings();
 
         // Start the timer
         this.timer_interval = setInterval(() => this.updateTimer(), 1000);
@@ -66,6 +72,52 @@ export class MessierGame {
           [array[i], array[j]] = [array[j], array[i]];
         }
         return array;
+      }
+
+
+      adjustDifficultySettings() {
+          switch (this.difficulty) {
+            case 'easy':
+              this.time_per_question = 45;
+              this.allowHints = true;
+              this.objectList = this.getEasyObjects();
+              break;
+            case 'medium':
+              this.time_per_question = 30;
+              this.allowHints = true;
+              this.objectList = this.getMediumObjects();
+              break;
+            case 'hard':
+              this.time_per_question = 15;
+              this.allowHints = false;
+              this.objectList = this.getHardObjects();
+              break;
+            default:
+              this.time_per_question = 30;
+              this.allowHints = true;
+              this.objectList = this.getMediumObjects();
+          }
+
+          this.remaining_time = this.time_per_question;
+          this.total_objects = this.objectList.length;
+          this.sequence = this.shuffleArray([...this.objectList]);
+          this.progress_bar.max = this.total_objects;
+      }
+
+        // Define methods to get object lists for each difficulty level
+      getEasyObjects() {
+        // Return an array of Messier numbers for easy difficulty
+        return [1, 13, 31, 42, 45, 51, 57, 81, 82, 104]; // Example objects
+      }
+
+      getMediumObjects() {
+        // Return an array of Messier numbers for medium difficulty
+        return Array.from({ length: 50 }, (_, i) => i + 1); // M1 to M50
+      }
+
+      getHardObjects() {
+        // Return an array of Messier numbers for hard difficulty
+        return Array.from({ length: 110 }, (_, i) => i + 1); // M1 to M110
       }
 
       updateLanguage(lang) {
@@ -320,6 +372,12 @@ export class MessierGame {
       showHint() {
         if (this.is_paused) return;
 
+        if (!this.allowHints) {
+          this.feedback_label.textContent = translations[this.lang].hintsNotAllowed;
+          this.feedback_label.style.color = 'red';
+          return;
+        }
+
         const mn = this.sequence[this.current_index];
         const objectInfo = this.data.find((obj) => obj.number === mn);
 
@@ -340,7 +398,8 @@ export class MessierGame {
         this.feedback_label.textContent =
             `${translations[this.lang].gameOver}${this.score}` +
             `${translations[this.lang].correctAnswers}${this.correct_answers}/${this.total_objects}` +
-            `${translations[this.lang].timeTaken}${total_time}${translations[this.lang].secondsSuffix}`;
+            `${translations[this.lang].timeTaken}${total_time}${translations[this.lang].secondsSuffix}` +
+            `\n${translations[this.lang].difficultyLevel}${translations[this.lang][this.difficulty]}`;
         this.feedback_label.style.color = "black";
         clearInterval(this.timer_interval);
         this.submit_button.disabled = true;

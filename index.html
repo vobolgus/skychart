@@ -18,14 +18,15 @@
             <h1 id="welcome-message">Welcome to the Messier Object Quiz</h1>
             <p>Test your knowledge of the 110 Messier objects!</p>
             <button id="start-button">Start Quiz</button>
+            <!-- Add IDs to options for translation -->
+            <select id="difficulty-select">
+              <option value="easy" id="option-easy">Easy</option>
+              <option value="medium" id="option-medium" selected>Medium</option>
+              <option value="hard" id="option-hard">Hard</option>
+            </select>
         </div>
 
         <script>
-            document
-                .getElementById("start-button")
-                .addEventListener("click", () => {
-                    window.location.href = "game.html";
-                });
             document.addEventListener("DOMContentLoaded", () => {
                 // Language data
                 const translations = {
@@ -35,6 +36,10 @@
                         home: "Home",
                         playGame: "Play Game",
                         language: "Русский",
+                        selectDifficulty: "Select Difficulty:",
+                        easy: "Easy",
+                        medium: "Medium",
+                        hard: "Hard",
                     },
                     ru: {
                         welcome: "Добро пожаловать в Викторину Объектов Мессье",
@@ -42,6 +47,10 @@
                         home: "Главная",
                         playGame: "Играть",
                         language: "English",
+                        selectDifficulty: "Выберите сложность:",
+                        easy: "Легко",
+                        medium: "Средне",
+                        hard: "Сложно",
                     },
                 };
 
@@ -55,6 +64,11 @@
                         translations[lang].startQuiz;
                     document.getElementById("language-toggle").textContent =
                         translations[lang].language;
+                    document.getElementById("label-select-difficulty").textContent = translations[lang].selectDifficulty;
+                    document.getElementById("option-easy").textContent = translations[lang].easy;
+                    document.getElementById("option-medium").textContent = translations[lang].medium;
+                    document.getElementById("option-hard").textContent = translations[lang].hard;
+
                     // Update navigation links
                     const navLinks = document.querySelectorAll("nav a");
                     navLinks[0].textContent = translations[lang].home;
@@ -66,6 +80,13 @@
                     .addEventListener("click", () => {
                         setLanguage(currentLanguage === "en" ? "ru" : "en");
                     });
+
+                document
+                    .getElementById("start-button")
+                    .addEventListener("click", () => {
+                const difficulty = document.getElementById("difficulty-select").value;
+                window.location.href = `game.html?difficulty=${difficulty}`;
+                });
 
                 // Initialize language
                 setLanguage(currentLanguage);

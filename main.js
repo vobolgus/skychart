@@ -4,6 +4,11 @@ import { MessierGame } from './messierGame.js';
 document.addEventListener("DOMContentLoaded", () => {
     'use strict';
 
+    // At the beginning of main.js
+    const urlParams = new URLSearchParams(window.location.search);
+    const difficulty = urlParams.get('difficulty') || 'medium'; // Default to 'medium' if not specified
+
+
     let currentLanguage = "en"; // Default language
 
     let game = null;
@@ -17,6 +22,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("nav-home").textContent = translations[lang].home;
     document.getElementById("nav-play-game").textContent =
         translations[lang].playGame;
+
+    if (document.getElementById("difficulty-select")) {
+        document.getElementById("label-select-difficulty").textContent = translations[lang].selectDifficulty;
+        document.getElementById("option-easy").textContent = translations[lang].easy;
+        document.getElementById("option-medium").textContent = translations[lang].medium;
+        document.getElementById("option-hard").textContent = translations[lang].hard;
+    }
 
     // Check if we're on the main page or game page
     if (document.getElementById("welcome-message")) {
@@ -103,13 +115,34 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
   };
+
+  // Collect image paths to preload based on difficulty
+    const getImagePaths = (difficulty) => {
+      let objectList = [];
+      switch (difficulty) {
+        case 'easy':
+          objectList = [1, 13, 31, 42, 45, 51, 57, 81, 82, 104]; // Same as in getEasyObjects()
+          break;
+        case 'medium':
+          objectList = Array.from({ length: 50 }, (_, i) => i + 1);
+          break;
+        case 'hard':
+          objectList = Array.from({ length: 110 }, (_, i) => i + 1);
+          break;
+        default:
+          objectList = Array.from({ length: 50 }, (_, i) => i + 1);
+      }
+
+      const paths = [];
+      for (const i of objectList) {
+        paths.push(`photos_avif/M${i}.avif`);
+        paths.push(`maps_avif/M${i}_map.avif`);
+        paths.push(`maps_avif/M${i}_map_full.avif`);
+      }
+      return paths;
+    };
   // Собираем пути ко всем изображениям, которые нужно предзагрузить
-  const imagePaths = [];
-  for (let i = 1; i <= 110; i++) {
-      imagePaths.push(`photos_avif/M${i}.avif`);
-      imagePaths.push(`maps_avif/M${i}_map.avif`);
-      imagePaths.push(`maps_avif/M${i}_map_full.avif`);
-  }
+    const imagePaths = getImagePaths(difficulty);
 
   // Функция инициализации игры
   const initGame = () => {
@@ -123,7 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Инициализируем игру
       if (document.getElementById('game-container')) {
-          game = new MessierGame()
+          game = new MessierGame(difficulty)
           setLanguage(currentLanguage);
       }
   };

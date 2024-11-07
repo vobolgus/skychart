@@ -28,6 +28,12 @@
       secondsSuffix: " seconds",
       hintText: 'Hint: ',
       noHintAvailable: 'No hint available for this object.',
+      hintsNotAllowed: 'Hints are not allowed in Hard mode.',
+      selectDifficulty: 'Select Difficulty:',
+      easy: 'Easy',
+      medium: 'Medium',
+      hard: 'Hard',
+      difficultyLevel: '\nDifficulty Level: ',
     },
     ru: {
       // Common
@@ -57,5 +63,11 @@
       correctAnswers: "\nПравильных ответов: ",
       timeTaken: "\nЗатраченное время: ",
       secondsSuffix: " секунд",
+      hintsNotAllowed: 'Подсказки недоступны в сложном режиме.',
+      selectDifficulty: 'Выберите сложность:',
+      easy: 'Легко',
+      medium: 'Средне',
+      hard: 'Сложно',
+      difficultyLevel: '\nУровень сложности: ',
     },
   };
