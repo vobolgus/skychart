@@ -293,7 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
         this.timer_label.textContent = `${translations[this.lang].timeRemaining}${this.remaining_time}${translations[this.lang].seconds}`;
 
         // Clear input
-        this.number_input.value = 1;
+        this.number_input.value = '';
 
         // Clear feedback
         this.feedback_label.textContent = "";
