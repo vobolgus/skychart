@@ -22,11 +22,12 @@
       incorrect: "Incorrect! The correct answer was M",
       timesUp: "Time's up! Moving to the next object.",
       paused: "Paused",
-      hintText: "Hint: ",
       gameOver: "Game Over\nYour score: ",
       correctAnswers: "\nCorrect answers: ",
       timeTaken: "\nTime taken: ",
       secondsSuffix: " seconds",
+      hintText: 'Hint: ',
+      noHintAvailable: 'No hint available for this object.',
     },
     ru: {
       // Common
@@ -50,7 +51,8 @@
       incorrect: "Неверно! Правильный ответ: М",
       timesUp: "Время вышло! Переходим к следующему объекту.",
       paused: "Пауза",
-      hintText: "Подсказка: ",
+      hintText: 'Подсказка: ',
+      noHintAvailable: 'Подсказка недоступна для этого объекта.',
       gameOver: "Игра окончена\nВаш счет: ",
       correctAnswers: "\nПравильных ответов: ",
       timeTaken: "\nЗатраченное время: ",

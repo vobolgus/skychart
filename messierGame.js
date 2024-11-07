@@ -1,4 +1,5 @@
 import {translations} from "./translations.js";
+import { messierData } from './messierData.js';
 
 let currentLanguage = "en"; // Default language
 
@@ -24,8 +25,8 @@ export class MessierGame {
         // Translation
         this.lang = currentLanguage;
 
-        // Data
-        this.data = []; // to be loaded
+        // Load data
+        this.loadData();
 
         // UI Elements
         this.photo_image = document.getElementById("photo-image");
@@ -71,31 +72,28 @@ export class MessierGame {
         this.lang = lang;
 
         // Update UI texts
-        document.getElementById("label-enter-number").textContent =
+        document.getElementById('label-enter-number').textContent =
             translations[lang].enterNumber;
-        document.getElementById("submit-button").textContent =
-            translations[lang].submit;
-        document.getElementById("pause-button").textContent = this.is_paused
+        this.submit_button.textContent = translations[lang].submit;
+        this.pause_button.textContent = this.is_paused
             ? translations[lang].resume
             : translations[lang].pause;
-        document.getElementById("next-button").textContent =
-            translations[lang].next;
-        document.getElementById("hint-button").textContent =
-            translations[lang].hint;
+        this.next_button.textContent = translations[lang].next;
+        this.hint_button.textContent = translations[lang].hint;
         this.timer_label.textContent = `${translations[lang].timeRemaining}${this.remaining_time}${translations[lang].seconds}`;
         this.score_label.textContent = `${translations[lang].score}${this.score}`;
-        // Update feedback label if necessary
-        // [Additional updates can be made here]
+
+        // Update feedback label if it's showing a hint
+        if (this.feedback_label.textContent.startsWith(translations[lang === 'en' ? 'ru' : 'en'].hintText)) {
+          // Re-display the hint in the new language
+          this.showHint();
+        }
       }
 
-      loadData() {
-        // Load data from table.txt
-        // Simulate the data
-        this.data = []; // index 0 corresponds to M1, index 1 to M2, etc.
 
-        for (let i = 1; i <= 110; i++) {
-          this.data.push(`Hint for M${i}`);
-        }
+      loadData() {
+        // Load the Messier data with hints
+        this.data = messierData;
       }
 
       loadQuestion() {
@@ -322,13 +320,19 @@ export class MessierGame {
       showHint() {
         if (this.is_paused) return;
 
-        let mn = this.sequence[this.current_index];
-        let info = this.data[mn - 1]; // Assuming first element is the hint
-        this.feedback_label.textContent = `${translations[this.lang].hintText}${info}`;
-        this.feedback_label.style.color = "orange";
+        const mn = this.sequence[this.current_index];
+        const objectInfo = this.data.find((obj) => obj.number === mn);
 
-        // Clear hint after 5 seconds
-        setTimeout(() => this.clearFeedback(), 5000);
+        if (objectInfo && objectInfo.hints && objectInfo.hints[this.lang]) {
+          this.feedback_label.textContent = `${translations[this.lang].hintText}${objectInfo.hints[this.lang]}`;
+          this.feedback_label.style.color = 'orange';
+
+          // Clear hint after 5 seconds
+          setTimeout(() => this.clearFeedback(), 5000);
+        } else {
+          this.feedback_label.textContent = translations[this.lang].noHintAvailable;
+          this.feedback_label.style.color = 'orange';
+        }
       }
 
       endGame() {
