@@ -178,6 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
         this.loadQuestion();
       }
 
+
       shuffleArray(array) {
         // Fisher-Yates shuffle
         for (let i = array.length - 1; i > 0; i--) {
