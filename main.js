@@ -1,4 +1,70 @@
 document.addEventListener("DOMContentLoaded", () => {
+    'use strict';
+  // Добавим функцию для предзагрузки изображений
+  const preloadImages = (imagePaths, callback) => {
+    let loadedImages = 0;
+    const totalImages = imagePaths.length;
+
+    if (totalImages === 0) {
+        callback();
+        return;
+    }
+
+    const progressElement = document.getElementById('loading-progress');
+
+    const updateProgress = () => {
+        const percent = Math.floor((loadedImages / totalImages) * 100);
+        progressElement.value = percent;
+    };
+
+    for (let i = 0; i < totalImages; i++) {
+        const img = new Image();
+        img.src = imagePaths[i];
+        img.onload = () => {
+            loadedImages++;
+            updateProgress();
+            if (loadedImages === totalImages) {
+                callback();
+            }
+        };
+        img.onerror = () => {
+            console.error('Ошибка загрузки изображения:', imagePaths[i]);
+            loadedImages++;
+            updateProgress();
+            if (loadedImages === totalImages) {
+                callback();
+            }
+        };
+    }
+  };
+  // Собираем пути ко всем изображениям, которые нужно предзагрузить
+  const imagePaths = [];
+  for (let i = 1; i <= 5; i++) {
+      imagePaths.push(`photos/M${i}.jpg`);
+      imagePaths.push(`maps/M${i}_map.png`);
+      imagePaths.push(`maps/M${i}_map_full.png`);
+  }
+
+  // Функция инициализации игры
+  const initGame = () => {
+      // Скрываем загрузочный экран
+      const loadingScreen = document.getElementById('loading-screen');
+      loadingScreen.style.display = 'none';
+
+      // Показываем контейнер игры
+      const gameContainer = document.getElementById('game-container');
+      gameContainer.style.display = 'block';
+
+      // Инициализируем игру
+      if (document.getElementById('game-container')) {
+          // Ваш существующий код инициализации игры
+          // ...
+
+          // Обновляем язык после загрузки игры
+          setLanguage(currentLanguage);
+      }
+  };
+
   // Language data
   const translations = {
     en: {
@@ -120,6 +186,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initialize language
   setLanguage(currentLanguage);
+
+  // Начинаем предзагрузку изображений
+    preloadImages(imagePaths, initGame);
 
   // Game initialization
   if (document.getElementById("game-container")) {
