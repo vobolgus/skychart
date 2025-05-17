@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "serve .",
+    "dev": "node_modules/.bin/serve .",
     "build": "mkdir -p dist && cp -R public dist/ && cp -R src dist/ && cp vercel.json dist/ && cp -R node_modules dist/",
-    "start": "serve dist"
+    "start": "node_modules/.bin/serve dist"
   },
   "devDependencies": {
     "serve": "^14.0.0"
