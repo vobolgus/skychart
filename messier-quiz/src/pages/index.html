@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+    <title>Messier Object Quiz - Home</title>
+    <link rel="stylesheet" href="../styles/main.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <!-- Add this in the <head> section -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+</head>
+<body>
+<nav>
+    <a href="index.html" id="nav-home">Home</a>
+    <a href="game.html" id="nav-play-game">Play Game</a>
+    <!-- Language Selection -->
+    <button id="language-toggle">Русский</button>
+    <button id="theme-toggle">Toggle Theme</button>
+</nav>
+
+<div id="main-container">
+    <h1 id="welcome-message">Welcome to the Messier Object Quiz</h1>
+    <p id="test-your-knowledge">Test your knowledge of the 110 Messier objects!</p>
+    <button id="start-button">Start Quiz</button>
+    <!-- Add IDs to options for translation -->
+    <label for="difficulty-select" id="label-select-difficulty">Select Difficulty:</label>
+    <select id="difficulty-select">
+        <option value="easy" id="option-easy">Easy</option>
+        <option value="medium" id="option-medium" selected>Medium</option>
+        <option value="hard" id="option-hard">Hard</option>
+    </select>
+</div>
+
+<script type="module">
+    import { getTranslations } from '../utils/dataService.js';
+    import { Navigation } from '../components/Navigation.js';
+
+    document.addEventListener("DOMContentLoaded", async () => {
+        let currentLanguage = "en"; // Default language
+        const translations = await getTranslations();
+
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Create navigation component
+        const navigation = new Navigation({
+            onLanguageToggle: () => {
+                currentLanguage = currentLanguage === "en" ? "ru" : "en";
+                setLanguage(currentLanguage);
+                navigation.updateLanguage(currentLanguage, translations);
+            },
+            onThemeToggle: () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            }
+        });
+
+        const setLanguage = (lang) => {
+            // Update main page elements
+            document.getElementById('welcome-message').textContent = translations[lang].welcome;
+            document.getElementById('test-your-knowledge').textContent = translations[lang].testYourKnowledge;
+            document.getElementById('start-button').textContent = translations[lang].startQuiz;
+            document.getElementById('label-select-difficulty').textContent = translations[lang].selectDifficulty;
+
+            // Update the options in the select element
+            document.getElementById('option-easy').textContent = translations[lang].easy;
+            document.getElementById('option-medium').textContent = translations[lang].medium;
+            document.getElementById('option-hard').textContent = translations[lang].hard;
+
+            // Update navigation
+            navigation.updateLanguage(lang, translations);
+        };
+
+        // Event listener for start button
+        document.getElementById("start-button").addEventListener("click", () => {
+            const difficulty = document.getElementById("difficulty-select").value;
+            window.location.href = `game.html?difficulty=${difficulty}&lang=${currentLanguage}`;
+        });
+
+        // Initialize language on page load
+        setLanguage(currentLanguage);
+    });
+</script>
+
+<footer>&copy; 2024 Messier Object Quiz. All rights reserved.</footer>
+</body>
+</html>
