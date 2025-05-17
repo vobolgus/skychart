@@ -1,23 +1,5 @@
 <!doctype html>
 <html>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        console.log('Page loaded');
-
-        // Log information about paths
-        console.log('Current pathname:', window.location.pathname);
-        console.log('Current origin:', window.location.origin);
-
-        // Try to fetch a critical resource and log the result
-        fetch('/src/styles/main.css')
-            .then(response => {
-                console.log('CSS fetch status:', response.status);
-            })
-            .catch(error => {
-                console.error('Error fetching CSS:', error);
-            });
-    });
-</script>
 <head>
     <title>Messier Object Quiz - Home</title>
     <link rel="stylesheet" href="../styles/main.css" />
@@ -49,6 +31,51 @@
         <option value="hard" id="option-hard">Hard</option>
     </select>
 </div>
+
+<!-- Add this to index.html, before your main script -->
+<script type="module">
+    import { testAllPaths } from '../utils/pathTest.js';
+
+    // Make available globally
+    window.testPaths = testAllPaths;
+
+    // Add button to run test
+    document.addEventListener('DOMContentLoaded', () => {
+        const button = document.createElement('button');
+        button.textContent = 'Run Path Tests';
+        button.style.position = 'fixed';
+        button.style.bottom = '10px';
+        button.style.left = '10px';
+        button.style.padding = '8px 16px';
+        button.style.backgroundColor = '#4caf50';
+        button.style.color = 'white';
+        button.style.border = 'none';
+        button.style.borderRadius = '4px';
+        button.style.cursor = 'pointer';
+        button.style.zIndex = '9999';
+
+        button.addEventListener('click', async () => {
+            button.textContent = 'Testing...';
+            button.disabled = true;
+
+            try {
+                const results = await testAllPaths();
+                console.log('Path test results:', results);
+
+                // Show results
+                alert(`Best path pattern: ${results.bestPattern}\nPrefix: "${results.bestPatternPrefix}"\nCheck console for details.`);
+            } catch (error) {
+                console.error('Path test error:', error);
+                alert('Error running path tests. Check console.');
+            } finally {
+                button.textContent = 'Run Path Tests';
+                button.disabled = false;
+            }
+        });
+
+        document.body.appendChild(button);
+    });
+</script>
 
 <script type="module">
     import { getTranslations } from '../utils/dataService.js';
@@ -105,5 +132,68 @@
 </script>
 
 <footer>&copy; 2024 Messier Object Quiz. All rights reserved.</footer>
+
+<!-- Debug panel -->
+<div id="debug-panel" style="position: fixed; bottom: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 10px; max-width: 400px; max-height: 300px; overflow: auto; font-family: monospace; font-size: 12px; z-index: 10000; display: none;">
+    <div style="margin-bottom: 5px; display: flex; justify-content: space-between;">
+        <strong>Debug Panel</strong>
+        <button onclick="document.getElementById('debug-panel').style.display='none'" style="background: none; border: none; color: white; cursor: pointer;">✕</button>
+    </div>
+    <div id="debug-content"></div>
+    <div style="margin-top: 10px;">
+        <a href="debug.html" target="_blank" style="color: #4caf50;">Open Debug Page</a>
+    </div>
+</div>
+
+<script>
+    // Only run in Vercel environment or when ?debug=true is in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const shouldDebug = urlParams.get('debug') === 'true' ||
+        window.location.hostname.includes('vercel.app');
+
+    if (shouldDebug) {
+        // Show debug panel
+        document.getElementById('debug-panel').style.display = 'block';
+
+        // Override console.log and console.error
+        const originalLog = console.log;
+        const originalError = console.error;
+        const debugContent = document.getElementById('debug-content');
+
+        console.log = function() {
+            originalLog.apply(console, arguments);
+            const args = Array.from(arguments).map(arg =>
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : arg
+            ).join(' ');
+
+            debugContent.innerHTML += `<div style="color:#8f8;">[LOG] ${args}</div>`;
+            debugContent.scrollTop = debugContent.scrollHeight;
+        };
+
+        console.error = function() {
+            originalError.apply(console, arguments);
+            const args = Array.from(arguments).map(arg =>
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : arg
+            ).join(' ');
+
+            debugContent.innerHTML += `<div style="color:#f88;">[ERROR] ${args}</div>`;
+            debugContent.scrollTop = debugContent.scrollHeight;
+        };
+
+        // Log environment info
+        console.log('Debug mode enabled');
+        console.log('URL:', window.location.href);
+        console.log('User Agent:', navigator.userAgent);
+
+        // Test resource loading
+        Promise.all([
+            fetch('/src/styles/main.css').then(r => ({path: '/src/styles/main.css', status: r.status})).catch(e => ({path: '/src/styles/main.css', error: e.message})),
+            fetch('./src/styles/main.css').then(r => ({path: './src/styles/main.css', status: r.status})).catch(e => ({path: './src/styles/main.css', error: e.message})),
+            fetch('../styles/main.css').then(r => ({path: '../styles/main.css', status: r.status})).catch(e => ({path: '../styles/main.css', error: e.message}))
+        ]).then(results => {
+            console.log('Resource test results:', results);
+        });
+    }
+</script>
 </body>
 </html>

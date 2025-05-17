@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Messier Quiz - Debug</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: monospace;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .debug-info {
+      background-color: #f5f5f5;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+    h2 {
+      margin-top: 30px;
+    }
+    .resource-status {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 10px;
+      margin-bottom: 5px;
+    }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+<h1>Messier Quiz - Deployment Debug</h1>
+
+<h2>Environment Information</h2>
+<div class="debug-info" id="env-info">Loading...</div>
+
+<h2>Resource Status</h2>
+<div class="debug-info" id="resource-status">Loading...</div>
+
+<h2>Module Import Tests</h2>
+<div class="debug-info" id="module-tests">Loading...</div>
+
+<h2>Critical Files</h2>
+<div class="debug-info" id="file-content">Loading...</div>
+
+<script>
+  // Display environment info
+  function showEnvironmentInfo() {
+    const envInfo = document.getElementById('env-info');
+    envInfo.innerHTML = `
+                <div><strong>URL:</strong> ${window.location.href}</div>
+                <div><strong>Pathname:</strong> ${window.location.pathname}</div>
+                <div><strong>Origin:</strong> ${window.location.origin}</div>
+                <div><strong>Host:</strong> ${window.location.host}</div>
+                <div><strong>User Agent:</strong> ${navigator.userAgent}</div>
+                <div><strong>Window Size:</strong> ${window.innerWidth}x${window.innerHeight}</div>
+                <div><strong>Device Pixel Ratio:</strong> ${window.devicePixelRatio}</div>
+                <div><strong>Time:</strong> ${new Date().toString()}</div>
+            `;
+  }
+
+  // Check resource loading
+  async function checkResources() {
+    const resources = [
+      '/src/styles/main.css',
+      '/src/data/translations.js',
+      '/src/data/messierData.js',
+      '/src/utils/dataService.js',
+      '/src/components/Navigation.js',
+      '/src/components/GameBoard.js',
+      '/public/photos_avif/M1.avif',
+      '/public/maps_avif/M1_map.avif'
+    ];
+
+    const statusDiv = document.getElementById('resource-status');
+    statusDiv.innerHTML = '';
+
+    for (const resource of resources) {
+      const resourceDiv = document.createElement('div');
+      resourceDiv.className = 'resource-status';
+
+      try {
+        const response = await fetch(resource);
+        const status = response.ok ?
+                `<span class="success">OK (${response.status})</span>` :
+                `<span class="error">Failed (${response.status})</span>`;
+
+        resourceDiv.innerHTML = `
+                        <div>${resource}</div>
+                        <div>${status}</div>
+                    `;
+      } catch (error) {
+        resourceDiv.innerHTML = `
+                        <div>${resource}</div>
+                        <div class="error">Error: ${error.message}</div>
+                    `;
+      }
+
+      statusDiv.appendChild(resourceDiv);
+    }
+  }
+
+  // Test module imports
+  async function testModuleImports() {
+    const modulesDiv = document.getElementById('module-tests');
+    modulesDiv.innerHTML = '';
+
+    const moduleTests = [
+      { path: '/src/data/translations.js', name: 'translations' },
+      { path: '/src/data/messierData.js', name: 'messierData' },
+      { path: '/src/utils/dataService.js', name: 'getTranslations, getMessierData' },
+      { path: '/src/components/Navigation.js', name: 'Navigation' }
+    ];
+
+    for (const test of moduleTests) {
+      const resultDiv = document.createElement('div');
+
+      try {
+        const module = await import(test.path);
+        resultDiv.innerHTML = `<div><strong>${test.path}</strong>: <span class="success">Successfully imported</span></div>`;
+        resultDiv.innerHTML += `<div>Contents: ${Object.keys(module).join(', ')}</div>`;
+      } catch (error) {
+        resultDiv.innerHTML = `<div><strong>${test.path}</strong>: <span class="error">Failed to import: ${error.message}</span></div>`;
+      }
+
+      modulesDiv.appendChild(resultDiv);
+    }
+  }
+
+  // Try to read critical file content
+  async function checkFileContent() {
+    const fileDiv = document.getElementById('file-content');
+    fileDiv.innerHTML = '';
+
+    // List of critical files to check
+    const criticalFiles = [
+      '/vercel.json',
+      '/src/pages/index.html'
+    ];
+
+    for (const file of criticalFiles) {
+      const fileResult = document.createElement('div');
+      fileResult.innerHTML = `<strong>${file}:</strong> `;
+
+      try {
+        const response = await fetch(file);
+        if (response.ok) {
+          const content = await response.text();
+          const preview = content.substring(0, 100) + (content.length > 100 ? '...' : '');
+          fileResult.innerHTML += `<pre class="success">${preview}</pre>`;
+        } else {
+          fileResult.innerHTML += `<span class="error">Failed to load (${response.status})</span>`;
+        }
+      } catch (error) {
+        fileResult.innerHTML += `<span class="error">Error: ${error.message}</span>`;
+      }
+
+      fileDiv.appendChild(fileResult);
+    }
+  }
+
+  // Run all tests
+  document.addEventListener('DOMContentLoaded', () => {
+    showEnvironmentInfo();
+    checkResources();
+    testModuleImports();
+    checkFileContent();
+  });
+</script>
+</body>
+</html>

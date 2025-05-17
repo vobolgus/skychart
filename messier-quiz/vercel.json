@@ -2,6 +2,7 @@
   "rewrites": [
     { "source": "/", "destination": "/src/pages/index.html" },
     { "source": "/game", "destination": "/src/pages/game.html" },
+    { "source": "/debug", "destination": "/src/pages/debug.html" },
     { "source": "/src/(.*)", "destination": "/src/$1" },
     { "source": "/public/(.*)", "destination": "/public/$1" }
   ],
@@ -9,7 +10,7 @@
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
       ]
     },
     {
