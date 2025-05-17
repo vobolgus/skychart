@@ -7,6 +7,7 @@
     { "source": "/game", "destination": "/src/pages/game.html" },
     { "source": "/debug", "destination": "/src/pages/debug.html" },
     { "source": "/src/(.*)", "destination": "/src/$1" },
-    { "source": "/public/(.*)", "destination": "/public/$1" }
+    { "source": "/public/(.*)", "destination": "/public/$1" },
+    { "source": "/(.*).html", "destination": "/src/pages/$1.html" }
   ]
 }

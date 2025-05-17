@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Messier Object Quiz - Game</title>
-    <link rel="stylesheet" href="../styles/main.css" />
+    <link rel="stylesheet" href="/src/styles/main.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="UTF-8" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,8 +12,8 @@
 <body>
 <!-- Navigation Bar -->
 <nav>
-    <a href="index.html" id="nav-home">Home</a>
-    <a href="game.html" id="nav-play-game">Play Game</a>
+    <a href="/" id="nav-home">Home</a>
+    <a href="/game" id="nav-play-game">Play Game</a>
     <button id="language-toggle">Русский</button>
     <button id="theme-toggle">Toggle Theme</button>
 </nav>
@@ -55,9 +55,9 @@
 </div>
 
 <script type="module">
-    import { getTranslations } from '../utils/dataService.js';
-    import { Navigation } from '../components/Navigation.js';
-    import { GameBoard } from '../components/GameBoard.js';
+    import { getTranslations } from '/src/utils/dataService.js';
+    import { Navigation } from '/src/components/Navigation.js';
+    import { GameBoard } from '/src/components/GameBoard.js';
 
     document.addEventListener("DOMContentLoaded", async () => {
         // Parse URL parameters
