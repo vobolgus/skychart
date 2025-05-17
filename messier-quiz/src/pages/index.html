@@ -1,5 +1,23 @@
 <!doctype html>
 <html>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('Page loaded');
+
+        // Log information about paths
+        console.log('Current pathname:', window.location.pathname);
+        console.log('Current origin:', window.location.origin);
+
+        // Try to fetch a critical resource and log the result
+        fetch('/src/styles/main.css')
+            .then(response => {
+                console.log('CSS fetch status:', response.status);
+            })
+            .catch(error => {
+                console.error('Error fetching CSS:', error);
+            });
+    });
+</script>
 <head>
     <title>Messier Object Quiz - Home</title>
     <link rel="stylesheet" href="../styles/main.css" />
