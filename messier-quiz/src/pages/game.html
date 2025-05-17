@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head>
+    <title>Messier Object Quiz - Game</title>
+    <link rel="stylesheet" href="../styles/main.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav>
+    <a href="index.html" id="nav-home">Home</a>
+    <a href="game.html" id="nav-play-game">Play Game</a>
+    <button id="language-toggle">Русский</button>
+    <button id="theme-toggle">Toggle Theme</button>
+</nav>
+
+<!-- Loading Screen -->
+<div id="loading-screen">
+    <div id="loading-spinner"></div>
+    <p id="loading-text">Loading game...</p>
+    <progress id="loading-progress" value="0" max="100"></progress>
+</div>
+
+<div id="game-container" style="display: none;">
+    <div id="image-container">
+        <!-- Images will be displayed here -->
+        <div id="current-images-container" class="images-container">
+            <img id="photo-image" src="" alt="Photo" class="image" />
+            <img id="map-image" src="" alt="Map" class="image" />
+        </div>
+    </div>
+
+    <div id="input-container">
+        <label for="number-input" id="label-enter-number">Enter Messier Number (1-110):</label>
+        <input type="number" id="number-input" min="1" max="110" autocomplete="off">
+        <button id="submit-button">Submit</button>
+    </div>
+
+    <div id="control-container">
+        <button id="pause-button">Pause</button>
+        <button id="next-button">Next</button>
+        <button id="hint-button">Hint</button>
+    </div>
+
+    <div id="progress-container">
+        <div id="feedback-label"></div>
+        <progress id="progress-bar" max="110" value="0"></progress>
+        <div id="timer-label">Time Remaining: 30s</div>
+        <div id="score-label">Score: 0</div>
+    </div>
+</div>
+
+<script type="module">
+    import { getTranslations } from '../utils/dataService.js';
+    import { Navigation } from '../components/Navigation.js';
+    import { GameBoard } from '../components/GameBoard.js';
+
+    document.addEventListener("DOMContentLoaded", async () => {
+        // Parse URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const difficulty = urlParams.get('difficulty') || 'medium';
+        let currentLanguage = urlParams.get('lang') || 'en';
+
+        // Load translations
+        const translations = await getTranslations();
+
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Set loading text based on language
+        document.getElementById('loading-text').textContent =
+            currentLanguage === 'en' ? 'Loading game...' : 'Загрузка игры...';
+
+        // Create navigation component
+        const navigation = new Navigation({
+            onLanguageToggle: () => {
+                currentLanguage = currentLanguage === "en" ? "ru" : "en";
+                navigation.updateLanguage(currentLanguage, translations);
+                if (gameBoard) {
+                    gameBoard.updateLanguage(currentLanguage, translations);
+                }
+            },
+            onThemeToggle: () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            }
+        });
+
+        // Update navigation text
+        navigation.updateLanguage(currentLanguage, translations);
+
+        // Initialize game board
+        const gameBoard = new GameBoard({
+            difficulty: difficulty,
+            language: currentLanguage,
+            translations: translations
+        });
+
+        // Initialize game
+        await gameBoard.initialize();
+    });
+</script>
+
+<footer>&copy; 2024 Messier Object Quiz. All rights reserved.</footer>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "messier-quiz",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "serve .",
+    "build": "mkdir -p dist && cp -R public dist/ && cp -R src dist/",
+    "start": "serve dist"
+  },
+  "devDependencies": {
+    "serve": "^14.0.0"
+  }
+}
